@@ -24,22 +24,6 @@ public class BarrierScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (isBarrier)
-            {
-                if (barrierHP < bulletAtack)
-                {
-                    playerHP = playerHP + (barrierHP - bulletAtack);
-                }
-            }
-            else
-            {
-                playerHP = playerHP - bulletAtack;
-            }
-
-        }
-
         if (Input.GetButtonDown("Fire1"))
         {
             isBarrier = true;
