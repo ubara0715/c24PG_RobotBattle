@@ -27,6 +27,9 @@ public class BarrierScript : MonoBehaviour
     [SerializeField,Header("球のレイヤー")] LayerMask bulletLayer;
 
     Collider[] bullets;
+
+    [SerializeField] float timer;
+
     void Start()
     {
         CreateBarrier();//バリアを生成
@@ -53,10 +56,14 @@ public class BarrierScript : MonoBehaviour
             isBarrier = true;
             currentBarrier.SetActive(true);
         }
-        else
+        else if(isBarrier && bullets.Length < 0 && timer < 0.5f)
         {
-            isBarrier = false;
-            currentBarrier.SetActive(false);
+            timer += Time.deltaTime;
+            if(timer > 0.5f)
+            {
+                isBarrier = false;
+                currentBarrier.SetActive(false);
+            }
         }
     }
 
