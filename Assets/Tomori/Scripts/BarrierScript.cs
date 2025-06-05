@@ -28,8 +28,6 @@ public class BarrierScript : MonoBehaviour
 
     Collider[] bullets;
 
-    [SerializeField] float timer;
-
     void Start()
     {
         CreateBarrier();//ƒoƒŠƒA‚ğ¶¬
@@ -56,14 +54,10 @@ public class BarrierScript : MonoBehaviour
             isBarrier = true;
             currentBarrier.SetActive(true);
         }
-        else if(isBarrier && bullets.Length < 0 && timer < 0.5f)
+        else if(bullets.Length < 0)
         {
-            timer += Time.deltaTime;
-            if(timer > 0.5f)
-            {
-                isBarrier = false;
-                currentBarrier.SetActive(false);
-            }
+            isBarrier = false;
+            currentBarrier.SetActive(false);
         }
     }
 
