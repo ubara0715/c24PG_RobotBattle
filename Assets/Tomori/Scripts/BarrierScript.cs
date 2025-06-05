@@ -9,7 +9,11 @@ public class BarrierScript : MonoBehaviour
 
     public float barrierHP = 100;//仮のバリアHP
     public float playerHP = 500;//仮のプレイヤーHP
-    [SerializeField] float bulletAtack = 200;//仮の実弾のダメージ
+
+    //下記3つのダメージは別の別の人が作ったダメージに応じて変更
+    [SerializeField] float bulletAtack = 200;//仮の実弾兵器のダメージ
+    [SerializeField] float energyAtack = 300;//仮のエネルギー兵器のダメージ
+    [SerializeField] float missileAtack = 400;//仮のミサイル兵器のダメージ
 
     public Transform player;
     public float sizeMultiplier = 2.0f;
@@ -57,10 +61,11 @@ public class BarrierScript : MonoBehaviour
         currentBarrier.transform.localScale = Vector3.one * maxSize * sizeMultiplier;
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
         //実弾兵器から発射される球のタグ
-        if (collision.gameObject.tag == "Bullet")
+        if (other.gameObject.tag == "Bullet")
         {
             if (isBarrier)
             {
@@ -80,9 +85,16 @@ public class BarrierScript : MonoBehaviour
         }
 
         //エネルギー兵器から発射される球のタグ
-        if(collision.gameObject.tag == "EnergyBullet")
+        if (other.gameObject.tag == "EnergyBullet")
         {
-
+            if (isBarrier)
+            {
+                //playerHP = playerHP（何もしない）;
+            }
+            else
+            {
+                playerHP = playerHP - energyAtack;
+            }
         }
     }
 }
