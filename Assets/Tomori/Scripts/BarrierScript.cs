@@ -12,10 +12,10 @@ public class BarrierScript : MonoBehaviour
     public float playerHP = 500;//仮のプレイヤーHP
 
     //下記3つのダメージは別の別の人が作ったダメージに応じて変更
-    /*[SerializeField] int bulletAtack = 200;//仮の実弾兵器のダメージ
+    [SerializeField] int bulletAtack = 200;//仮の実弾兵器のダメージ
     [SerializeField] int energyAtack = 300;//仮のエネルギー兵器のダメージ
     [SerializeField] int missileAtack = 400;//仮のミサイル兵器のダメージ
-    [SerializeField] int contactAtack = 300;//仮の接触攻撃のダメージ*/
+    [SerializeField] int contactAtack = 300;//仮の接触攻撃のダメージ
     [SerializeField] int contactBonus = 100;//接触攻撃のボーナスポイント（仕様書に書かれていたため）
 
     [SerializeField] Transform playerTR;
@@ -26,6 +26,8 @@ public class BarrierScript : MonoBehaviour
     [SerializeField,Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     [SerializeField,Header("検出範囲の半径")] float detectionRadius;
     [SerializeField,Header("球のレイヤー")] LayerMask bulletLayer;
+
+    [SerializeField] WeaponsAtackScript atackScript;
 
     Collider[] bullets;
 
@@ -104,27 +106,34 @@ public class BarrierScript : MonoBehaviour
     }
 
 
-    public void ReceiveDamage(AttackType attackType, int damageAmount)
+    public int ReceiveDamage(AttackType attackType, int damageAmount)
     {
+        int actualDamage = 0;
+
         switch (attackType)
         {
             case AttackType.Bullet:
                 if (isBarrier)
                 {
                     if (barrierHP <= damageAmount)
-                        playerHP += barrierHP - damageAmount;
-                    // else → バリアで完全防御
+                    {
+                        actualDamage = damageAmount - barrierHP;
+                        playerHP -= actualDamage;
+                    }
+                    // else → バリアで完全防御（ダメージ0）
                 }
                 else
                 {
-                    playerHP -= damageAmount;
+                    actualDamage = damageAmount;
+                    playerHP -= actualDamage;
                 }
                 break;
 
             case AttackType.Energy:
                 if (!isBarrier)
                 {
-                    playerHP -= damageAmount;
+                    actualDamage = damageAmount;
+                    playerHP -= actualDamage;
                 }
                 break;
 
@@ -132,11 +141,15 @@ public class BarrierScript : MonoBehaviour
                 if (isBarrier)
                 {
                     if (barrierHP <= damageAmount)
-                        playerHP += barrierHP - damageAmount;
+                    {
+                        actualDamage = damageAmount - barrierHP;
+                        playerHP -= actualDamage;
+                    }
                 }
                 else
                 {
-                    playerHP -= damageAmount;
+                    actualDamage = damageAmount;
+                    playerHP -= actualDamage;
                 }
                 break;
 
@@ -145,22 +158,30 @@ public class BarrierScript : MonoBehaviour
                 if (isBarrier)
                 {
                     if (barrierHP <= totalContactDamage)
-                        playerHP += barrierHP - totalContactDamage;
+                    {
+                        actualDamage = totalContactDamage - barrierHP;
+                        playerHP -= actualDamage;
+                    }
                 }
                 else
                 {
-                    playerHP -= totalContactDamage;
+                    actualDamage = totalContactDamage;
+                    playerHP -= actualDamage;
                 }
                 break;
         }
+
+        return actualDamage;
     }
 
+
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //実弾兵器から発射される球のタグ
         if (other.gameObject.tag == "Bullet")
         {
+            //var a = other.GetComponent<WeaponsAtackScript>();
             if (isBarrier)
             {
                 if (barrierHP <= bulletAtack)
@@ -230,6 +251,6 @@ public class BarrierScript : MonoBehaviour
                 playerHP = playerHP - missileAtack;
             }
         }
-    }*/
+    }
 }
 
