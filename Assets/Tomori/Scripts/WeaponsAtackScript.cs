@@ -9,7 +9,7 @@ public class WeaponsAtackScript : MonoBehaviour
         //Bulletなどの攻撃する球を消すための処理（必要に応じて別スクリプトに移動してほしい）
         if(other.gameObject.tag == "Barrier" || other.gameObject.tag == "Player")
         {
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
         }
     }
 }
