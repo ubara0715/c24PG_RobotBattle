@@ -54,7 +54,7 @@ public class BarrierScript : MonoBehaviour
             isBarrier = true;
             currentBarrier.SetActive(true);
         }
-        else if(bullets.Length < 0)
+        else
         {
             isBarrier = false;
             currentBarrier.SetActive(false);
@@ -65,19 +65,24 @@ public class BarrierScript : MonoBehaviour
     //プレイヤーの大きさに合わせたバリアを生成
     void CreateBarrier()
     {
-        Renderer playerRenderer = playerTR.GetComponentInChildren<Renderer>();
+        Renderer[] renderers = playerTR.GetComponentsInChildren<Renderer>();
 
-        Bounds bounds = playerRenderer.bounds;
-        float maxSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);//一番大きいところをmaxSizeに設定
+        if (renderers.Length == 0) return;
 
-        // バリア生成
+        Bounds combinedBounds = renderers[0].bounds;
+
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            combinedBounds.Encapsulate(renderers[i].bounds);
+        }
+
+        float maxSize = Mathf.Max(combinedBounds.size.x, combinedBounds.size.y, combinedBounds.size.z);
+
         currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity, playerTR);
-
-        // バリアのサイズ調整（元のサイズを基準にスケーリング）
         currentBarrier.transform.localScale = Vector3.one * maxSize * sizeMultiplier;
     }
 
-    
+
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）
     private void OnTriggerEnter(Collider other)
     {
@@ -134,7 +139,7 @@ public class BarrierScript : MonoBehaviour
             }
         }
 
-        //接触攻撃を検知するためのタグ（場合によっては消す）
+        //接触攻撃を検知するためのタグ（場合によっては消す or 変更）
         if(other.gameObject.tag == "Contact")
         {
             if (isBarrier)
