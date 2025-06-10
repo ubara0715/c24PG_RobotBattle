@@ -31,10 +31,10 @@ public class BarrierScript : MonoBehaviour
 
     public enum AttackType
     {
-        Bullet,
-        Energy,
-        Missile,
-        Contact
+        Bullet,　　  //担当者：波照間煌斗
+        Energy,　　　//担当者：山内亜音
+        Missile,　　 //担当者：新垣大空
+        Contact      //担当者：エイデン
     }
 
     void Start()
