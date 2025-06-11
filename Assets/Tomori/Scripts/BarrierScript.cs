@@ -27,8 +27,6 @@ public class BarrierScript : MonoBehaviour
     [SerializeField,Header("検出範囲の半径")] float detectionRadius;
     [SerializeField,Header("球のレイヤー")] LayerMask bulletLayer;
 
-    [SerializeField] WeaponsAtackScript atackScript;
-
     Collider[] bullets;
 
     public enum AttackType
@@ -106,7 +104,7 @@ public class BarrierScript : MonoBehaviour
     }
 
 
-    public int ReceiveDamage(AttackType attackType, int damageAmount)
+    /*public int ReceiveDamage(AttackType attackType, int damageAmount)
     {
         int actualDamage = 0;
 
@@ -172,7 +170,7 @@ public class BarrierScript : MonoBehaviour
         }
 
         return actualDamage;
-    }
+    }*/
 
 
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）
@@ -181,7 +179,8 @@ public class BarrierScript : MonoBehaviour
         //実弾兵器から発射される球のタグ
         if (other.gameObject.tag == "Bullet")
         {
-            //var a = other.GetComponent<WeaponsAtackScript>();
+            var core = other.GetComponent<CoreScript>();
+
             if (isBarrier)
             {
                 if (barrierHP <= bulletAtack)
@@ -200,7 +199,7 @@ public class BarrierScript : MonoBehaviour
         }
 
         //エネルギー兵器から発射される球のタグ
-        if (other.gameObject.tag == "EnergyBullet")
+        if (other.gameObject.tag == "Energy")
         {
             if (isBarrier)
             {
@@ -233,7 +232,7 @@ public class BarrierScript : MonoBehaviour
         }
 
         //接触攻撃を検知するためのタグ（場合によっては消す or 変更）
-        if(other.gameObject.tag == "Contact")
+        /*if(other.gameObject.tag == "Contact")
         {
             if (isBarrier)
             {
@@ -250,7 +249,7 @@ public class BarrierScript : MonoBehaviour
             {
                 playerHP = playerHP - missileAtack;
             }
-        }
+        }*/
     }
 }
 
