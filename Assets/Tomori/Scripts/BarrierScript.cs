@@ -12,11 +12,11 @@ public class BarrierScript : MonoBehaviour
     public float playerHP = 500;//仮のプレイヤーHP
 
     //下記3つのダメージは別の別の人が作ったダメージに応じて変更
-    [SerializeField] int bulletAtack = 200;//仮の実弾兵器のダメージ
+    /*[SerializeField] int bulletAtack = 200;//仮の実弾兵器のダメージ
     [SerializeField] int energyAtack = 300;//仮のエネルギー兵器のダメージ
     [SerializeField] int missileAtack = 400;//仮のミサイル兵器のダメージ
     [SerializeField] int contactAtack = 300;//仮の接触攻撃のダメージ
-    [SerializeField] int contactBonus = 100;//接触攻撃のボーナスポイント（仕様書に書かれていたため）
+    [SerializeField] int contactBonus = 100;//接触攻撃のボーナスポイント（仕様書に書かれていたため）*/
 
     [SerializeField] Transform playerTR;
     [SerializeField] float sizeMultiplier = 1.2f;
@@ -29,13 +29,17 @@ public class BarrierScript : MonoBehaviour
 
     Collider[] bullets;
 
-    public enum AttackType
+    public CoreScript coreScript;
+   
+    //[SerializeField] int physicalReduction = 0;
+
+    /*public enum AttackType
     {
-        Bullet,　　  //担当者：波照間煌斗
-        Energy,　　　//担当者：山内亜音
-        Missile,　　 //担当者：新垣大空
-        Contact      //担当者：エイデン
-    }
+        Bullet,　　  
+        Energy,　　　
+        Missile,　　 
+        Contact      
+    }*/
 
     void Start()
     {
@@ -176,58 +180,51 @@ public class BarrierScript : MonoBehaviour
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）
     private void OnTriggerEnter(Collider other)
     {
+        int damage = 0;
+            
         //実弾兵器から発射される球のタグ
         if (other.gameObject.tag == "Bullet")
         {
-            var core = other.GetComponent<CoreScript>();
-
+            damage = other.GetComponent<BulletScript>().GetDamge();
             if (isBarrier)
             {
-                if (barrierHP <= bulletAtack)
-                {
-                    playerHP = playerHP + (barrierHP - bulletAtack);
-                }
-                else if (barrierHP >= bulletAtack)
-                {
-                    //playerHP = playerHP;（何もしない）
-                }
+                damage = damage < 0 ? 0 : damage;
+                coreScript.Damage(damage);
             }
             else
             {
-                playerHP = playerHP - bulletAtack;
+                coreScript.Damage(damage);
             }
         }
 
         //エネルギー兵器から発射される球のタグ
         if (other.gameObject.tag == "Energy")
         {
+            damage = other.GetComponent<EnergyBulletScript>().GetDamage();
+
             if (isBarrier)
             {
-                //playerHP = playerHP（何もしない）;
+                coreScript.Damage(0);
             }
             else
             {
-                playerHP = playerHP - energyAtack;
+                coreScript.Damage(damage);
             }
         }
 
         //ミサイル兵器から発射されるミサイルのタグ
         if(other.gameObject.tag == "Missile")
         {
+            damage = other.GetComponent<MissileBulletSc>().GetDamage();
+
             if (isBarrier)
             {
-                if (barrierHP <= missileAtack)
-                {
-                    playerHP = playerHP + (barrierHP - missileAtack);
-                }
-                else if (barrierHP >= missileAtack)
-                {
-                    //playerHP = playerHP;（何もしない）
-                }
+                damage = damage < 0 ? 0 : damage;
+                coreScript.Damage(damage);
             }
             else
             {
-                playerHP = playerHP - missileAtack;
+                coreScript.Damage(damage);
             }
         }
 
