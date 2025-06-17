@@ -30,16 +30,8 @@
         Collider[] bullets;
 
         public CoreScript coreScript;
-   
-        //[SerializeField] int physicalReduction = 0;
 
-        /*public enum AttackType
-        {
-            Bullet,　　  
-            Energy,　　　
-            Missile,　　 
-            Contact      
-        }*/
+    [SerializeField] EnergyScript energyScript;
 
         void Start()
         {
@@ -62,10 +54,10 @@
         //バリアをtrueにする
         void SetBarrier()
         {
-            float diameter = currentBarrier.transform.localScale.x;
+            float diameter = currentBarrier.transform.localScale.x / 2;
             float cost = diameter * barrierHP;
 
-            if (bullets.Length > 0)
+            if (bullets.Length > 0　/*|| energyScript.UseEnergy()*/)
             {
                 if (!isBarrier && energyPool >= cost)
                 {
