@@ -7,7 +7,7 @@ public class BarrierScript : MonoBehaviour
     bool isBarrier = false;
     [SerializeField] GameObject barrier;
 
-    [SerializeField] int barrierHP = 150;//仮のバリアHP
+    [SerializeField] int barrierHP = 100;//仮のバリアHP
     [SerializeField] float energyPool = 10000;//仮のエネルギープール量
     public float playerHP = 500;//仮のプレイヤーHP
 
@@ -188,6 +188,7 @@ public class BarrierScript : MonoBehaviour
             damage = other.GetComponent<BulletScript>().GetDamge();
             if (isBarrier)
             {
+                damage = damage - barrierHP;
                 damage = damage < 0 ? 0 : damage;
                 coreScript.Damage(damage);
             }
@@ -219,6 +220,7 @@ public class BarrierScript : MonoBehaviour
 
             if (isBarrier)
             {
+                damage = damage - barrierHP;
                 damage = damage < 0 ? 0 : damage;
                 coreScript.Damage(damage);
             }
