@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class BarrierScript : MonoBehaviour
 {
-    bool isBarrier = false;
     [SerializeField] GameObject barrier;
 
-    [SerializeField] int barrierHP = 100;//仮のバリアHP
+    [SerializeField] int barrierHP = 100;//バリアHP
 
     [SerializeField] Transform playerTR;
     [SerializeField] float sizeMultiplier = 1.2f;
-
-    GameObject currentBarrier;
 
     [SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
     [SerializeField, Header("球のレイヤー")] LayerMask bulletLayer;
 
+    [SerializeField] EnergyScript energyScript;
+
     Collider[] bullets;
 
-    public CoreScript coreScript;
+    GameObject currentBarrier;
 
-    [SerializeField] EnergyScript energyScript;
+    public CoreScript coreScript;
 
     float barrierDuration = 2.0f; // バリアを維持する秒数
     float barrierTimer = 0f;
 
+    bool isBarrier = false;
 
     void Start()
     {
