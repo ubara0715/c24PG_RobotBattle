@@ -193,7 +193,7 @@ public class BarrierScript : MonoBehaviour
         //エネルギー兵器から発射される球のタグ
         if (collision.gameObject.tag == "Energy")
         {
-            damage = collision.gameObject.GetComponent<EnergyBulletScript>().GetDamage();
+            damage = collision.gameObject.GetComponent<EnergyBulletScript>().EnergyDamege();
 
             if (isBarrier)
             {
