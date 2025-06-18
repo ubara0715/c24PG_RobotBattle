@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - Barrier
+  - Energy
+  - Missile
   layers:
   - Default
   - TransparentFX
