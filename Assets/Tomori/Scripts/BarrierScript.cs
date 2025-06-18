@@ -65,7 +65,7 @@ public class BarrierScript : MonoBehaviour
 
         if (bullets.Length > 0)
         {
-            if (!isBarrier && energyScript.UseEnergy(cost + 30))
+            if (!isBarrier && energyScript.UseEnergy(cost + 100))
             {
                 isBarrier = true;
                 currentBarrier.SetActive(true);
