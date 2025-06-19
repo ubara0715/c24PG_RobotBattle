@@ -22,7 +22,7 @@ public class BarrierScript : MonoBehaviour
 
     GameObject currentBarrier;
 
-    float sizeMultiplier = 2f;
+    float sizeMultiplier = 2f;  
 
     float barrierDuration = 2.0f; // ƒoƒŠƒA‚ğˆÛ‚·‚é•b”
     float barrierTimer = 0f;
