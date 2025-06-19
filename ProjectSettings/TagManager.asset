@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bullet
-  - Barrier
   - Energy
   - Missile
+  - Barrier
   layers:
   - Default
   - TransparentFX
