@@ -6,7 +6,7 @@ public class BarrierScript : MonoBehaviour
 {
     [SerializeField] GameObject barrier;
 
-    [SerializeField] int barrierHP = 100;//バリアHP
+    [SerializeField] int barrierHP = 15;//バリアHP
 
     [SerializeField] Transform playerTR;
     [SerializeField] float sizeMultiplier = 1.2f;
@@ -60,12 +60,12 @@ public class BarrierScript : MonoBehaviour
     //バリアをtrueにする
     void SetBarrier()
     {
-        float diameter = currentBarrier.transform.localScale.x / 2;
+        float diameter = currentBarrier.transform.localScale.x;
         float cost = diameter * barrierHP;
 
         if (bullets.Length > 0)
         {
-            if (!isBarrier && energyScript.UseEnergy(cost + 100))
+            if (!isBarrier && energyScript.UseEnergy(cost + 50))
             {
                 isBarrier = true;
                 currentBarrier.SetActive(true);
