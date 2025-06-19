@@ -9,7 +9,7 @@ public class BarrierScript : MonoBehaviour
     [SerializeField] int barrierHP = 15;//バリアHP
 
     [SerializeField] Transform playerTR;
-    [SerializeField] float sizeMultiplier = 1.2f;
+    [SerializeField] float sizeMultiplier = 2f;
 
     [SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
@@ -17,11 +17,11 @@ public class BarrierScript : MonoBehaviour
 
     [SerializeField] EnergyScript energyScript;
 
+    public CoreScript coreScript;
+
     Collider[] bullets;
 
     GameObject currentBarrier;
-
-    public CoreScript coreScript;
 
     float barrierDuration = 2.0f; // バリアを維持する秒数
     float barrierTimer = 0f;
