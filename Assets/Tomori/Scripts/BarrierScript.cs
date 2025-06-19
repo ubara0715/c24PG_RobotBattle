@@ -7,7 +7,6 @@ public class BarrierScript : MonoBehaviour
     [SerializeField] GameObject barrier;
 
     [SerializeField] Transform playerTR;
-    [SerializeField] float sizeMultiplier = 2f;
 
     [SerializeField, Header("バリアの防御値")] int barrierHP = 15;
 
@@ -22,6 +21,8 @@ public class BarrierScript : MonoBehaviour
     Collider[] bullets;
 
     GameObject currentBarrier;
+
+    float sizeMultiplier = 2f;
 
     float barrierDuration = 2.0f; // バリアを維持する秒数
     float barrierTimer = 0f;
