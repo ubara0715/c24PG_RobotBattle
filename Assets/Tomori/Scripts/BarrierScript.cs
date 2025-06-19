@@ -6,10 +6,10 @@ public class BarrierScript : MonoBehaviour
 {
     [SerializeField] GameObject barrier;
 
-    [SerializeField,Header("バリアの防御値")] int barrierHP = 15;
-
     [SerializeField] Transform playerTR;
     [SerializeField] float sizeMultiplier = 2f;
+
+    [SerializeField, Header("バリアの防御値")] int barrierHP = 15;
 
     [SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
