@@ -6,7 +6,7 @@ public class BarrierScript : MonoBehaviour
 {
     [SerializeField] GameObject barrier;
 
-    [SerializeField] int barrierHP = 15;//バリアHP
+    [SerializeField,Header("バリアの防御値")] int barrierHP = 15;
 
     [SerializeField] Transform playerTR;
     [SerializeField] float sizeMultiplier = 2f;
