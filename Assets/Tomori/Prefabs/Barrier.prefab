@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 6562928939063489489}
   - component: {fileID: 4572114862767938302}
   - component: {fileID: 2438506133392843704}
+  - component: {fileID: -8260972860095554820}
   m_Layer: 0
   m_Name: Barrier
-  m_TagString: Untagged
+  m_TagString: Barrier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,9 +100,23 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8260972860095554820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332427518970735433}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003a3d7d5aed65f48a797ef738b4e5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coreScript: {fileID: 0}
+  barrierManager: {fileID: 0}

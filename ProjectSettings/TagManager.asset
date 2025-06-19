@@ -5,11 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bullet
+  - Energy
+  - Missile
+  - Barrier
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullets
   - Water
   - UI
   - 
