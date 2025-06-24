@@ -4,101 +4,51 @@ using UnityEngine;
 
 public class BarrierScript : MonoBehaviour
 {
-    bool isBarrier = false;
-    [SerializeField] GameObject barrier;
+    public CoreScript coreScript;
+    public BarrierManager barrierManager;
 
-    public float barrierHP = 100;//‰¼‚ÌƒoƒŠƒAHP
-    public float playerHP = 500;//‰¼‚ÌƒvƒŒƒCƒ„[HP
-    [SerializeField] float bulletAtack = 200;//‰¼‚ÌÀ’e‚Ìƒ_ƒ[ƒW
-
-    public Transform player;
-    public float sizeMultiplier = 2.0f;
-
-    private GameObject currentBarrier;
-
-    void Start()
-    {
-        CreateBarrier();
-        currentBarrier.SetActive(false);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (isBarrier)
-            {
-                if (barrierHP < bulletAtack)
-                {
-                    playerHP = playerHP + (barrierHP - bulletAtack);
-                }
-            }
-            else
-            {
-                playerHP = playerHP - bulletAtack;
-            }
-
-        }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            isBarrier = true;
-            SetBarrier();
-        }
-    }
-
-
-    //ƒoƒŠƒA‚ğtrue‚É‚·‚é
-    void SetBarrier()
-    {
-        if (isBarrier)
-        {
-            currentBarrier.SetActive(true);
-        }
-    }
-
-
-    //ƒvƒŒƒCƒ„[‚Ì‘å‚«‚³‚É‡‚í‚¹‚½ƒoƒŠƒA‚ğ¶¬
-    void CreateBarrier()
-    {
-        Renderer playerRenderer = player.GetComponentInChildren<Renderer>();
-
-        Bounds bounds = playerRenderer.bounds;
-        float maxSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
-
-        // ƒoƒŠƒA¶¬
-        currentBarrier = Instantiate(barrier, player.position, Quaternion.identity, player);
-
-        // ƒoƒŠƒA‚ÌƒTƒCƒY’²®iŒ³‚ÌƒTƒCƒY‚ğŠî€‚ÉƒXƒP[ƒŠƒ“ƒOj
-        currentBarrier.transform.localScale = Vector3.one * maxSize * sizeMultiplier;
-    }
-
+    //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ãŸã‚ã«triggerã‚’ä½¿ã†ï¼ˆplayerã®isTriggerã‚’trueï¼‰
     private void OnCollisionEnter(Collision collision)
     {
-        //À’e•ºŠí‚©‚ç”­Ë‚³‚ê‚é‹…‚Ìƒ^ƒO
+        int damage = 0;
+
+        //å®Ÿå¼¾å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹çƒã®ã‚¿ã‚°
         if (collision.gameObject.tag == "Bullet")
         {
-            if (isBarrier)
-            {
-                if (barrierHP < bulletAtack)
-                {
-                    playerHP = playerHP + (barrierHP - bulletAtack);
-                }
-                else if (barrierHP > bulletAtack)
-                {
-                    //playerHP = playerHP;i‰½‚à‚µ‚È‚¢j
-                }
-            }
-            else
-            {
-                playerHP = playerHP - bulletAtack;
-            }
+            damage = collision.gameObject.GetComponent<BulletScript>().GetDamage();
+            
+                damage = damage - barrierManager.barrierHP;
+                damage = damage < 0 ? 0 : damage;
+                coreScript.Damage(damage);
+           
+
+            collision.gameObject.SetActive(false);
         }
 
-        //ƒGƒlƒ‹ƒM[•ºŠí‚©‚ç”­Ë‚³‚ê‚é‹…‚Ìƒ^ƒO
-        if(collision.gameObject.tag == "EnergyBullet")
+        //ã‚¨ãƒãƒ«ã‚®ãƒ¼å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹çƒã®ã‚¿ã‚°
+        if (collision.gameObject.tag == "Energy")
         {
+            damage = collision.gameObject.GetComponent<EnergyBulletScript>().EnergyDamege();
 
+            
+                coreScript.Damage(0);
+           
+
+            collision.gameObject.SetActive(false);
+        }
+
+        //ãƒŸã‚µã‚¤ãƒ«å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹ãƒŸã‚µã‚¤ãƒ«ã®ã‚¿ã‚°
+        if (collision.gameObject.tag == "Missile")
+        {
+            damage = collision.gameObject.GetComponent<MissileBulletSc>().GetDamage();
+
+            
+                damage = damage - barrierManager.barrierHP;
+                damage = damage < 0 ? 0 : damage;
+                coreScript.Damage(damage);
+           
+
+            collision.gameObject.SetActive(false);
         }
     }
 }
