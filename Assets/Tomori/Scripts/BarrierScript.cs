@@ -7,12 +7,12 @@ public class BarrierScript : MonoBehaviour
     public CoreScript coreScript;
     public BarrierManager barrierManager;
 
-    //ƒ_ƒ[ƒW‚ğŒvZ‚·‚é‚½‚ß‚Étrigger‚ğg‚¤iplayer‚ÌisTrigger‚ğtruej
+    //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ãŸã‚ã«triggerã‚’ä½¿ã†ï¼ˆplayerã®isTriggerã‚’trueï¼‰
     private void OnCollisionEnter(Collision collision)
     {
         int damage = 0;
 
-        //À’e•ºŠí‚©‚ç”­Ë‚³‚ê‚é‹…‚Ìƒ^ƒO
+        //å®Ÿå¼¾å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹çƒã®ã‚¿ã‚°
         if (collision.gameObject.tag == "Bullet")
         {
             damage = collision.gameObject.GetComponent<BulletScript>().GetDamage();
@@ -25,7 +25,7 @@ public class BarrierScript : MonoBehaviour
             collision.gameObject.SetActive(false);
         }
 
-        //ƒGƒlƒ‹ƒM[•ºŠí‚©‚ç”­Ë‚³‚ê‚é‹…‚Ìƒ^ƒO
+        //ã‚¨ãƒãƒ«ã‚®ãƒ¼å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹çƒã®ã‚¿ã‚°
         if (collision.gameObject.tag == "Energy")
         {
             damage = collision.gameObject.GetComponent<EnergyBulletScript>().EnergyDamege();
@@ -37,7 +37,7 @@ public class BarrierScript : MonoBehaviour
             collision.gameObject.SetActive(false);
         }
 
-        //ƒ~ƒTƒCƒ‹•ºŠí‚©‚ç”­Ë‚³‚ê‚éƒ~ƒTƒCƒ‹‚Ìƒ^ƒO
+        //ãƒŸã‚µã‚¤ãƒ«å…µå™¨ã‹ã‚‰ç™ºå°„ã•ã‚Œã‚‹ãƒŸã‚µã‚¤ãƒ«ã®ã‚¿ã‚°
         if (collision.gameObject.tag == "Missile")
         {
             damage = collision.gameObject.GetComponent<MissileBulletSc>().GetDamage();
