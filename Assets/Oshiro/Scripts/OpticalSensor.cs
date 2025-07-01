@@ -56,6 +56,11 @@ public class OpSensorObj : RadarSensorObj
 
         return diffvec;
     }
+
+    public GameObject TargetOBj()
+    {
+        return targetObj;
+    }
 }
 
 public class OpticalSensor : MonoBehaviour
@@ -88,6 +93,7 @@ public class OpticalSensor : MonoBehaviour
     public OpSensorObj GetNearestEnemy(List<OpSensorObj> targets, Transform myTf)
     {
 
+        if (targets.Count == 0) return null;
         OpSensorObj sample = targets[0];
 
         foreach(OpSensorObj targetObj in targets)
@@ -160,10 +166,10 @@ public class OpticalSensor : MonoBehaviour
 
         if (tags.Contains(other.gameObject.tag))
         {
-            targets.Add(new OpSensorObj(other.gameObject));
-
             if(CheckIfItCanFire(other))
             {
+                targets.Add(new OpSensorObj(other.gameObject));
+
                 coreScript.OnOpticalSensor(targets, isVisible: true);
             }
         }
