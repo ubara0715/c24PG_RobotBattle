@@ -18,13 +18,13 @@ public class MissileBulletSc : MonoBehaviour
     [Header("’ÇÕ‰Â”\‹——£"), SerializeField] float trackingLimitDistance = 10;
     [Header("Á¸‚Ü‚Å‚ÌŠÔ"),SerializeField] float destroyTimeLimit = 10;
     [Header("”š”­”»’èc—¯ŠÔ"),SerializeField] float explosionTime = 0.4f;
-    [Header("ày—ô’e"), SerializeField, Range(0, 10)] int explosiveBullet = 0;
+    //[Header("ày—ô’e"), SerializeField, Range(0, 10)] int explosiveBullet = 0;
 
     int attackPow = 0;          //UŒ‚—Í
     float moveSpeed = 0;        //‘¬“x
     bool isTracking = false;    //’ÇÕ’†
     bool isAccel = false;       //‰Á‘¬’†
-    bool isExplosive = false;   //ày—ô’e
+    //bool isExplosive = false;   //ày—ô’e
 
     public void SetTargetObj(GameObject target)
     {
