@@ -4,50 +4,74 @@ using UnityEngine;
 
 public class EnergyBulletScript : MonoBehaviour
 {
-    // privert関数
+    // パーティクル修正、カラー変更
 
-    // 距離減衰をリアルタイムで減少させたい
+    // ダメージ計算
+    float range = 0;
+    int damege = 0;
+    [HideInInspector] public float usedEnergy_clone;
+    [HideInInspector] public float speed_clone;
 
-    float duration = 0;
-
-    Vector3 startPos;
-    float distance = 0;
-
-    [HideInInspector] public float usedEnergy;
-
+    // カラー変更
     Color color;
     ParticleSystem ps;
 
+    // メソッド
     void Awake()
     {
         ps = GetComponent<ParticleSystem>();
-
-        startPos = transform.position;
-    }
-
-    public int EnergyDamege()
-    {
-        if ((int)(distance / 100) >= 1)
-        {
-            for (int _ = 0; _ <= (int)(distance / 100); _++)
-            {
-                DistanceDecay();
-            }
-        }
-
-        return (int)usedEnergy;
+        FilghtDistance();
     }
 
     void Update()
     {
-        duration += Time.deltaTime;
-
-        if(usedEnergy <= 0)
+        // エネルギーなくなったら消滅
+        if(usedEnergy_clone <= 0)
         {
             Destroy(gameObject);
         }
+
+        // 距離減衰
+        //Debug.Log("残りエネルギー：" + usedEnergy_clone + "飛距離：" + range);
+        if(range / 100 >= 1)
+        {
+            DistanceDecay();
+            range = 0;
+        }
     }
 
+    // 振れたら消滅、ダメージを表示
+    void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
+        Debug.Log(EnergyDamege());
+    }
+
+    // 関数
+
+    // ダメージ算出
+    public int EnergyDamege()
+    {
+        damege = (int)usedEnergy_clone;
+        return damege;
+    }
+
+    // 距離減衰用の関数、動くのは確認済み
+    void DistanceDecay()
+    {
+        usedEnergy_clone = (int)(usedEnergy_clone * 0.8f);
+        //Debug.Log("ダメージ減少！");
+    }
+
+    // 飛距離計算
+    void FilghtDistance()
+    {
+        range += speed_clone * Time.fixedDeltaTime;
+        Invoke("FilghtDistance", Time.deltaTime);
+    }
+
+    //開発段階
+    /*
     void OnCollisionEnter(Collision collision)
     {
         distance = (int)(Vector3.Distance(startPos, transform.position));
@@ -59,11 +83,5 @@ public class EnergyBulletScript : MonoBehaviour
     {
         //Debug.Log(EnergyDamege());
     }
-
-    // 距離減衰用の関数、動くのは確認済み
-    void DistanceDecay()
-    {
-        usedEnergy = (int)(usedEnergy * 0.8f);
-        //Debug.Log("ダメージ減少！");
-    }
+    */
 }

@@ -60,7 +60,7 @@ public class BulletScript : MonoBehaviour
 
             float moveAmount = speed * eval * Time.deltaTime;//進む距離
 
-            transform.position += transform.up * moveAmount + new Vector3(0, heightAnimC.Evaluate(distance));//ポジション移動
+            transform.position += transform.forward * moveAmount + new Vector3(0, heightAnimC.Evaluate(distance));//ポジション移動
 
             distance += moveAmount;//距離加算
 

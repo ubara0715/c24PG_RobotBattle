@@ -13,6 +13,9 @@ public class EnergyScript : MonoBehaviour
 
     void Start()
     {
+        //初期エネルギーをマックスにする
+        energyAmount = maxAmount;
+
         IncEnergy();
     }
 
@@ -37,7 +40,7 @@ public class EnergyScript : MonoBehaviour
     //エネルギー消費関数
     public bool UseEnergy(float useAmount)//関数を呼ぶ側で消費量を指定
     {
-        if (energyAmount - useAmount >= 0)//必要エネルギーがあるとき
+        if (energyAmount >= useAmount)//必要エネルギーがあるとき
         {
             energyAmount -= useAmount;
 

@@ -1,13 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class MacineGunScript : LiveGunOriginScript
 {
-
+    public GameObject targetObj;
     void Start()
     {
-        //MacineGun—p‚Éƒpƒ‰ƒ[ƒ^[‚ğİ’è
+        //MacineGunç”¨ã«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’è¨­å®š
         bulletAmount = 30;
         bulletSpeed = 15;
         fireRate = 6;
@@ -16,28 +18,33 @@ public class MacineGunScript : LiveGunOriginScript
         fireEnergyReq = 2;
         reloadEnergyReq = bulletAmount * fireEnergyReq / 3;
 
-        //’eƒvƒŒƒnƒu‚ğ‘•’e”~2ŒÂ•ª—pˆÓ
-        unUsedBulletList = BulletInst(bulletAmount);
-        usedBulletList = BulletInst(bulletAmount * 2);
-
-
-        //’e‚ÌƒXƒNƒŠƒvƒgæ“¾
-        foreach (var list in unUsedBulletList)
-        {
-            unUsedBulletSCList.Add(list.GetComponent<BulletScript>());
-        }
-        foreach (var list in usedBulletList)
-        {
-            usedBulletSCList.Add(list.GetComponent<BulletScript>());
-        }
+        Preparation();
     }
 
     void Update()
     {
+        Vector3 angle = gunObj.transform.localEulerAngles;//éŠƒæœ¬ä½“ã®å›è»¢ã‚’å–å¾—
+
+        //0ï½360ã«ãªã£ã¦ã„ã‚‹ã®ã‚’-180ï½180ã«ã™ã‚‹
+        if (angle.y > 180)
+        {
+            angle.y = angle.y - 360;
+        }
+        if (angle.x > 180)
+        {
+            angle.x = angle.x - 360;
+        }
+
+        //Xè»¸ã¨Yè»¸ã®å›è»¢ã‚’45åº¦ã®ç¯„å›²ã§åˆ¶é™
+        angle.x = Mathf.Clamp(angle.x, -22.5f, 22.5f);
+        angle.y = Mathf.Clamp(angle.y, -22.5f, 22.5f);
+
+        gunObj.transform.localRotation = Quaternion.Euler(angle);//åˆ¶é™ã•ã‚ŒãŸè§’åº¦ã‚’å…¥ã‚Œã‚‹
+
+
         if (Input.GetButton("Fire1"))
         {
-            StartCoroutine(Fire());
+            StartCoroutine(Fire(targetObj));
         }
     }
-
 }

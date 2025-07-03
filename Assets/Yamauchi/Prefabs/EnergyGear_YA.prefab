@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5826995804853980370}
   m_Layer: 0
   m_Name: EnergyGear_YA
-  m_TagString: Energy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,11 +46,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1125682158915574702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af55fa73e421f6543b4acf18cd28664c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e1adce3f18b49e40a6e2708a034a653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyBullet: {fileID: 1018266170718575047, guid: c5e91bccae4e8f64f875ce4b91747a23, type: 3}
+  energyBullet: {fileID: 1018266170718575047, guid: 4ce0168340ce75248b19c39fbb5ce226, type: 3}
   energyPool: {fileID: 0}
+  instantiatePos: 1.1
+  speed: 100
 --- !u!33 &6577211630620175066
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -146,7 +148,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

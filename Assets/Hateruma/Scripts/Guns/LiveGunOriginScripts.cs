@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,32 +6,58 @@ using UnityEngine;
 
 public class LiveGunOriginScript : MonoBehaviour
 {
-    public int bulletAmount;//‘•’e”
-    public float fireRate;//”­Ë‘¬“x
-    public float bulletSpeed;//’e‘¬
-    public float fireRange;//Ë’ö
-    public float reloadTime;//ƒŠƒ[ƒhŠÔ
-    public int fireEnergyReq;//•K—vƒGƒlƒ‹ƒM[(1”­‚ ‚½‚è)
-    public int reloadEnergyReq;
+    public int bulletAmount;//è£…å¼¾æ•°
+    public float fireRate;//ç™ºå°„é€Ÿåº¦
+    public float bulletSpeed;//å¼¾é€Ÿ
+    public float fireRange;//å°„ç¨‹
+    public float reloadTime;//ãƒªãƒ­ãƒ¼ãƒ‰æ™‚é–“
+    public int fireEnergyReq;//å¿…è¦ã‚¨ãƒãƒ«ã‚®ãƒ¼(1ç™ºã‚ãŸã‚Š)
+    public int reloadEnergyReq;//å¿…è¦ã‚¨ãƒãƒ«ã‚®ãƒ¼(ãƒªãƒ­ãƒ¼ãƒ‰æ™‚)
 
-    bool isReload = false;//ƒŠƒ[ƒh’†‚©‚Ç‚¤‚©
+    public bool isShotGun = false;//ã‚·ãƒ§ãƒƒãƒˆã‚¬ãƒ³ã‹ã©ã†ã‹
 
-    bool isRunningFire = false;//”­Ëˆ—‚ÌƒRƒ‹[ƒ`ƒ“‚ª“®‚¢‚Ä‚¢‚é‚©
+    bool isReload = false;//ãƒªãƒ­ãƒ¼ãƒ‰ä¸­ã‹ã©ã†ã‹
 
-    [SerializeField] GameObject bulletObj;//’e‚ÌƒvƒŒƒnƒuƒIƒuƒWƒFƒNƒg
-    public List<GameObject> unUsedBulletList = new List<GameObject>();//c’e—pƒŠƒXƒg
-    public List<GameObject> usedBulletList = new List<GameObject>();//g—pÏ‚İ‚Ì’e—pƒŠƒXƒg
+    bool isRunningFire = false;//ç™ºå°„å‡¦ç†ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ãŒå‹•ã„ã¦ã„ã‚‹ã‹
 
-    public List<BulletScript> unUsedBulletSCList = new List<BulletScript>();//c’e‚ÌƒXƒNƒŠƒvƒg—pƒŠƒXƒg
-    public List<BulletScript> usedBulletSCList = new List<BulletScript>();//g—pÏ‚İ’e‚ÌƒXƒNƒŠƒvƒg—pƒŠƒXƒg
+    public GameObject gunObj;//éŠƒæœ¬ä½“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)
 
-    public EnergyScript energySC;//ƒGƒlƒ‹ƒM[ƒXƒNƒŠƒvƒg
-    public CoreScript coreSC;//ƒRƒAƒXƒNƒŠƒvƒg
+    [SerializeField] GameObject bulletObj;//å¼¾ã®ãƒ—ãƒ¬ãƒãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    public List<GameObject> unUsedBulletList = new List<GameObject>();//æ®‹å¼¾ç”¨ãƒªã‚¹ãƒˆ
+    public List<GameObject> usedBulletList = new List<GameObject>();//ä½¿ç”¨æ¸ˆã¿ã®å¼¾ç”¨ãƒªã‚¹ãƒˆ
 
-    public List<GameObject> BulletInst(int amount)
+    public List<BulletScript> unUsedBulletSCList = new List<BulletScript>();//æ®‹å¼¾ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆç”¨ãƒªã‚¹ãƒˆ
+    public List<BulletScript> usedBulletSCList = new List<BulletScript>();//ä½¿ç”¨æ¸ˆã¿å¼¾ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆç”¨ãƒªã‚¹ãƒˆ
+
+    public EnergyScript energySC;//ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+    public CoreScript coreSC;//ã‚³ã‚¢ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+
+    public void Preparation()
+    {
+        gunObj = transform.parent.gameObject;
+
+        //å¼¾ãƒ—ãƒ¬ãƒãƒ–ã‚’è£…å¼¾æ•°Ã—2å€‹åˆ†ç”¨æ„
+        unUsedBulletList = BulletInst(bulletAmount);
+        usedBulletList = BulletInst(bulletAmount * 2);
+
+
+        //å¼¾ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆå–å¾—
+        foreach (var list in unUsedBulletList)
+        {
+            unUsedBulletSCList.Add(list.GetComponent<BulletScript>());
+        }
+        foreach (var list in usedBulletList)
+        {
+            usedBulletSCList.Add(list.GetComponent<BulletScript>());
+        }
+    }
+
+
+
+    List<GameObject> BulletInst(int amount)
     {
         var bulletList = new List<GameObject>();
-        //’eƒvƒŒƒnƒu‚ğ‘•’e”•ª—pˆÓ
+        //å¼¾ãƒ—ãƒ¬ãƒãƒ–ã‚’è£…å¼¾æ•°åˆ†ç”¨æ„
         for (int i = 0; i < amount; i++)
         {
             bulletList.Add(
@@ -46,11 +72,11 @@ public class LiveGunOriginScript : MonoBehaviour
     }
 
 
-    //‹…”­ËŠÖ”
-    public IEnumerator Fire(bool isShotGun = false)
+    //çƒç™ºå°„é–¢æ•°
+    public IEnumerator Fire(GameObject targetObj = null)
     {
 
-        //ƒRƒ‹[ƒ`ƒ“d•¡–h~
+        //ã‚³ãƒ«ãƒ¼ãƒãƒ³é‡è¤‡é˜²æ­¢
         if (isRunningFire || isReload)
         {
             yield break;
@@ -58,74 +84,77 @@ public class LiveGunOriginScript : MonoBehaviour
 
         isRunningFire = true;
 
-        //c’e‚ª‚ ‚ê‚ÎŒ‚‚Â
-        if (unUsedBulletList.Count > 0 && (energySC.UseEnergy(fireEnergyReq)))
+        //TargetLook(targetObj);
+
+        //æ®‹å¼¾ãŒã‚ã‚Œã°æ’ƒã¤
+        if (unUsedBulletList.Count > 0 && energySC.UseEnergy(fireEnergyReq))
         {
             unUsedBulletList[0].transform.position = transform.position;
             unUsedBulletList[0].transform.rotation = transform.rotation;
 
-            //c’e‚ÌƒXƒNƒŠƒvƒg‚ÌShotŠÖ”ŒÄ‚Ño‚µ
+            //æ®‹å¼¾ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®Shoté–¢æ•°å‘¼ã³å‡ºã—
             StartCoroutine(unUsedBulletSCList[0].Shot(bulletSpeed, fireRange));
 
-            //Œ‚‚¿o‚³‚ê‚½’e‚Æ‚»‚ÌƒXƒNƒŠƒvƒg‚ğg—pÏ‚İƒŠƒXƒg‚É’Ç‰Á
+            //æ’ƒã¡å‡ºã•ã‚ŒãŸå¼¾ã¨ãã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ä½¿ç”¨æ¸ˆã¿ãƒªã‚¹ãƒˆã«è¿½åŠ 
             usedBulletList.Add(unUsedBulletList[0]);
             usedBulletSCList.Add(unUsedBulletSCList[0]);
 
 
-            //c’eƒŠƒXƒg‚©‚çíœ
+            //æ®‹å¼¾ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
             unUsedBulletList.RemoveAt(0);
             unUsedBulletSCList.RemoveAt(0);
 
-            //ƒVƒ‡ƒbƒgƒKƒ“‚Ì‚İ
+            //ã‚·ãƒ§ãƒƒãƒˆã‚¬ãƒ³ã®ã¿
             if (isShotGun)
             {
-                var currentAngle = transform.localEulerAngles;//Šp“x•Û‘¶
+                var currentAngle = transform.localEulerAngles;//è§’åº¦ä¿å­˜
 
-                //9”­’Ç‰Á‚Å”­Ë
+                //9ç™ºè¿½åŠ ã§ç™ºå°„
                 for (int i = 0; i < 9; i++)
                 {
-                    //ƒAƒ“ƒOƒ‹‚ğƒ‰ƒ“ƒ_ƒ€‚É•Ï‚¦‚Ä‚Î‚ç‚¯‚³‚¹‚é
-                    transform.localEulerAngles = new Vector3(Random.Range(-7.5f, 7.5f), Random.Range(0f, 360f));
+                    //ã‚¢ãƒ³ã‚°ãƒ«ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å¤‰ãˆã¦ã°ã‚‰ã‘ã•ã›ã‚‹
+                    transform.localEulerAngles = new Vector3(Random.Range(-7.5f, 7.5f), Random.Range(-7.5f, 7.5f));
                     unUsedBulletList[0].transform.position = transform.position;
                     unUsedBulletList[0].transform.rotation = transform.rotation;
 
-                    //c’e‚ÌƒXƒNƒŠƒvƒg‚ÌShotŠÖ”ŒÄ‚Ño‚µ
+                    //æ®‹å¼¾ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®Shoté–¢æ•°å‘¼ã³å‡ºã—
                     StartCoroutine(unUsedBulletSCList[0].Shot(bulletSpeed, fireRange));
 
-                    //Œ‚‚¿o‚³‚ê‚½’e‚Æ‚»‚ÌƒXƒNƒŠƒvƒg‚ğg—pÏ‚İƒŠƒXƒg‚É’Ç‰Á
+                    //æ’ƒã¡å‡ºã•ã‚ŒãŸå¼¾ã¨ãã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ä½¿ç”¨æ¸ˆã¿ãƒªã‚¹ãƒˆã«è¿½åŠ 
                     usedBulletList.Add(unUsedBulletList[0]);
                     usedBulletSCList.Add(unUsedBulletSCList[0]);
 
 
-                    //c’eƒŠƒXƒg‚©‚çíœ
+                    //æ®‹å¼¾ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
                     unUsedBulletList.RemoveAt(0);
                     unUsedBulletSCList.RemoveAt(0);
 
-                    transform.localEulerAngles = currentAngle;//Šp“x‚ğ–ß‚·
+                    transform.localEulerAngles = currentAngle;//è§’åº¦ã‚’æˆ»ã™
                 }
             }
 
         }
         else
         {
-            //ƒŠƒ[ƒh’†‚Å‚È‚¯‚ê‚ÎƒŠƒ[ƒh
-            if (!isReload && (energySC.UseEnergy(reloadEnergyReq)))
+            //ãƒªãƒ­ãƒ¼ãƒ‰ä¸­ã§ãªã‘ã‚Œã°ãƒªãƒ­ãƒ¼ãƒ‰
+            if (!isReload && energySC.UseEnergy(reloadEnergyReq))
             {
                 StartCoroutine(Reload());
                 isReload = true;
             }
         }
-        yield return new WaitForSeconds(1f / fireRate);//”­ËŠÔŠu•ª‘Ò‚Â
+        yield return new WaitForSeconds(1f / fireRate);//ç™ºå°„é–“éš”åˆ†å¾…ã¤
 
         isRunningFire = false;
 
     }
 
-    //ƒŠƒ[ƒhŠÖ”
-    public IEnumerator Reload()
+    //ãƒªãƒ­ãƒ¼ãƒ‰é–¢æ•°
+    IEnumerator Reload()
     {
-        yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(reloadTime);//ãƒªãƒ­ãƒ¼ãƒ‰æ™‚é–“
 
+        //è£…å¼¾æ•°ãŒãƒãƒƒã‚¯ã‚¹ã«ãªã‚‹ã¾ã§ãƒªã‚¹ãƒˆã«è¿½åŠ 
         while (unUsedBulletList.Count < bulletAmount && usedBulletList.Count > 0)
         {
             unUsedBulletList.Add(usedBulletList[0]);
@@ -138,4 +167,36 @@ public class LiveGunOriginScript : MonoBehaviour
         isReload = false;
     }
 
+    //bool TargetLook(GameObject targetObj)
+    //{
+    //    if (targetObj != null)
+    //    {
+            
+
+    //        //ç¾åœ¨ã®éŠƒæœ¬ä½“ã®å›è»¢ã®å€¤ã‚’å–å¾—
+    //        Vector3 movedAngle = new Vector3(gunObj.transform.localEulerAngles.x, gunObj.transform.localEulerAngles.y);
+    //        movedAngle.x = movedAngle.x <= 180f ? Mathf.Abs(movedAngle.x) : Mathf.Abs(movedAngle.x - 360f);//Xè»¸
+    //        movedAngle.y = movedAngle.y <= 180f ? Mathf.Abs(movedAngle.y) : Mathf.Abs(movedAngle.y - 360f);//Yè»¸
+            
+
+    //        Vector3 targetDir = targetObj.transform.position - gunObj.transform.position;//ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®æ–¹å‘
+    //        float angle = Vector3.Angle(targetDir, gunObj.transform.forward);//éŠƒæœ¬ä½“ã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®æ–¹å‘ã®å·®åˆ†
+
+    //        Debug.Log($"{angle - movedAngle.x} + {angle - movedAngle.y}");
+
+    //        if (angle - movedAngle.x <= 22.5f && angle - movedAngle.y <= 22.5f)
+    //        {
+    //            gunObj.transform.LookAt(targetObj.transform, Vector3.forward);
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 }
