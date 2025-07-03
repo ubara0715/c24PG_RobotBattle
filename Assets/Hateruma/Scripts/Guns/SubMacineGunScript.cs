@@ -15,24 +15,30 @@ public class SubMacineGunScript : LiveGunOriginScript
         fireEnergyReq = 1;
         reloadEnergyReq = bulletAmount * fireEnergyReq / 3;
 
-        //’eƒvƒŒƒnƒu‚ğ‘•’e”~2ŒÂ•ª—pˆÓ
-        unUsedBulletList = BulletInst(bulletAmount);
-        usedBulletList = BulletInst(bulletAmount * 2);
-
-
-        //’e‚ÌƒXƒNƒŠƒvƒgæ“¾
-        foreach (var list in unUsedBulletList)
-        {
-            unUsedBulletSCList.Add(list.GetComponent<BulletScript>());
-        }
-        foreach (var list in usedBulletList)
-        {
-            usedBulletSCList.Add(list.GetComponent<BulletScript>());
-        }
+        Preparation();
     }
 
     void Update()
     {
+        Vector3 angle = gunObj.transform.localEulerAngles;//e–{‘Ì‚Ì‰ñ“]‚ğæ“¾
+
+        //0`360‚É‚È‚Á‚Ä‚¢‚é‚Ì‚ğ-180`180‚É‚·‚é
+        if (angle.y > 180)
+        {
+            angle.y = angle.y - 360;
+        }
+        if (angle.x > 180)
+        {
+            angle.x = angle.x - 360;
+        }
+
+        //X²‚ÆY²‚Ì‰ñ“]‚ğ45“x‚Ì”ÍˆÍ‚Å§ŒÀ
+        angle.x = Mathf.Clamp(angle.x, -22.5f, 22.5f);
+        angle.y = Mathf.Clamp(angle.y, -22.5f, 22.5f);
+
+        gunObj.transform.localRotation = Quaternion.Euler(angle);//§ŒÀ‚³‚ê‚½Šp“x‚ğ“ü‚ê‚é
+
+
         if (Input.GetButton("Fire1"))
         {
             StartCoroutine(Fire());

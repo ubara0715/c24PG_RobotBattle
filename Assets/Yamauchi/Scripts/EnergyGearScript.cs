@@ -8,14 +8,23 @@ public class EnergyGearScript : MonoBehaviour
     [SerializeField,Header("エネルギー弾のPrefabをアタッチしてください")] GameObject energyBullet;
     [Header("エネルギープールが付いたObjectをアタッチしてください")] public EnergyScript energyPool;
     [Header("上手く発射できないなぁと思ったら調整してください")] public float instantiatePos = 1.1f;
+    CoreScript core;
+
+    int usedMax = 50;
+    public float speed = 100.0f;
+
+    // メソッド
+    void Start()
+    {
+        core = transform.parent.GetComponent<CoreScript>();
+        core.AddWeight(usedMax);
+    }
 
     // public関数
-
-    public void ShotEnergy(float usedEnergy,GameObject target)
+    public void ShotEnergy(int usedEnergy,GameObject target)
     {
-        // ダメージ計算、減算はBulletの方
-        // 値を渡してAddForceを加えるだけか？
-        //Debug.Log("起動！");
+        // ダメージ計算、減算はBulletの方で行う
+        // 値を渡してAddForceを加えるだけ
 
         // 距離計算してエネルギー使用量を最低限に抑えたい
         float two_distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
@@ -25,23 +34,23 @@ public class EnergyGearScript : MonoBehaviour
 
         Rigidbody rb_clone = clone.GetComponent<Rigidbody>();
         EnergyBulletScript bulletSc = clone.GetComponent<EnergyBulletScript>();
-        bulletSc.usedEnergy = usedEnergy;
+        bulletSc.usedEnergy_clone = usedEnergy;
+        bulletSc.speed_clone = speed;
         clone.transform.parent = gameObject.transform;
 
         // 撃ちだす
         Shot(rb_clone);
     }
 
-
     // privert関数
-
-    // ただのInstantiate、コード長くなるから別で書いた
     GameObject EnergyBullet_clone()
     {
+        Vector3 instPos = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + instantiatePos);
+
         GameObject energyBullet_clone =
             Instantiate(
                 energyBullet,
-                gameObject.transform.forward * 1.1f, //AddForceなので生成位置にモノがあるとうまく発射できない、のでもし発射しないなぁと思ったら調整してね
+                instPos, //AddForceなので生成位置にモノがあるとうまく発射できない、のでもし発射しないなぁと思ったら調整してね
                 Quaternion.identity
                 );
 
@@ -50,6 +59,6 @@ public class EnergyGearScript : MonoBehaviour
 
     void Shot(Rigidbody rb)
     {
-        rb.AddForce(transform.forward * (10000.0f/*←遅いと思ったらここの値を増やしてもらって*/ / (1.0f/Time.deltaTime)), ForceMode.Impulse);
+        rb.AddForce(transform.forward * (speed / Time.fixedDeltaTime), ForceMode.Force);
     }
 }

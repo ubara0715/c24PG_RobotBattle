@@ -16,13 +16,13 @@ public class BarrierManager : MonoBehaviour
     [SerializeField] GameObject barrier;
     float sizeMultiplier = 2f;
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
-    [SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
-    [SerializeField, Header("球のレイヤー")] LayerMask bulletLayer;
+    //[SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
+    //[SerializeField, Header("球のレイヤー")] LayerMask bulletLayer;
     BarrierScript barrierScript;
 
     public CoreScript coreScript;
 
-    public const int TISEBA = 30;
+    public const int TISEBA = 100;
 
     private void Awake()
     {
@@ -42,9 +42,9 @@ public class BarrierManager : MonoBehaviour
 
     void Update()
     {
-        detectionCenter = playerTR.localPosition;
+        //detectionCenter = playerTR.localPosition;
 
-        bullets = Physics.OverlapSphere(detectionCenter, detectionRadius, bulletLayer);
+        //bullets = Physics.OverlapSphere(detectionCenter, detectionRadius, bulletLayer);
 
         if (isBarrier)
         {

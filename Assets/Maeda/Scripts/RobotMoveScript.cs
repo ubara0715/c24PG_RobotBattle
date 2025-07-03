@@ -35,6 +35,7 @@ public class RobotMoveScript : MonoBehaviour
 
         //テスト用
         StartCoroutine(MoveTarget(sphere));
+        //StartCoroutine(RotateRobot(sphere));
     }
 
     void Update()
@@ -71,7 +72,7 @@ public class RobotMoveScript : MonoBehaviour
 
                 //自分から相手の方向にAddForce
                 robotRB.AddForce(direction.normalized * moveForce, ForceMode.Force);
-
+                
                 //速度チェック
                 CheckVelocity();
                 
@@ -110,16 +111,18 @@ public class RobotMoveScript : MonoBehaviour
     //ロボットの回転
     IEnumerator RotateRobot(GameObject targetOBJ)
     {
-        while (Vector3.Angle(transform.forward, targetOBJ.transform.position - transform.position) > 10)
+        Vector3 direction = targetOBJ.transform.position - transform.position;
+        
+        while (Vector3.Angle(transform.forward, direction) > 10)
         {
             if (energyScript.UseEnergy(0.01f))
             {
-                Vector3 direction = targetOBJ.transform.position - transform.position;
+                direction = targetOBJ.transform.position - transform.position;
 
                 float angle = Vector3.SignedAngle(transform.forward, direction, transform.up);
-
+                
                 //角度が小さい方に回転
-                robotRB.AddTorque(direction * -Mathf.Sign(angle) * rotateForce, ForceMode.Force);
+                robotRB.AddTorque(direction * -Mathf.Sign(angle) * rotateForce, ForceMode.Force);   
             }
 
             yield return null;

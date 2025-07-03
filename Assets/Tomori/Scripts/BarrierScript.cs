@@ -7,6 +7,16 @@ public class BarrierScript : MonoBehaviour
     public CoreScript coreScript;
     public BarrierManager barrierManager;
 
+    private void Start()
+    {
+        int Barrier = LayerMask.NameToLayer("Barrier");
+        int Floor = LayerMask.NameToLayer("Floor");
+        int Player = LayerMask.NameToLayer("Player");
+
+        Physics.IgnoreLayerCollision(Barrier, Floor);
+        Physics.IgnoreLayerCollision(Barrier, Player);
+    }
+
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）
     private void OnCollisionEnter(Collision collision)
     {
@@ -16,11 +26,11 @@ public class BarrierScript : MonoBehaviour
         if (collision.gameObject.tag == "Bullet")
         {
             damage = collision.gameObject.GetComponent<BulletScript>().GetDamage();
-            
-                damage = damage - barrierManager.barrierHP;
-                damage = damage < 0 ? 0 : damage;
-                coreScript.Damage(damage);
-           
+
+            damage = damage - barrierManager.barrierHP;
+            damage = damage < 0 ? 0 : damage;
+            coreScript.Damage(damage);
+
 
             collision.gameObject.SetActive(false);
         }
@@ -30,9 +40,9 @@ public class BarrierScript : MonoBehaviour
         {
             damage = collision.gameObject.GetComponent<EnergyBulletScript>().EnergyDamege();
 
-            
-                coreScript.Damage(0);
-           
+
+            coreScript.Damage(0);
+
 
             collision.gameObject.SetActive(false);
         }
@@ -42,11 +52,11 @@ public class BarrierScript : MonoBehaviour
         {
             damage = collision.gameObject.GetComponent<MissileBulletSc>().GetDamage();
 
-            
-                damage = damage - barrierManager.barrierHP;
-                damage = damage < 0 ? 0 : damage;
-                coreScript.Damage(damage);
-           
+
+            damage = damage - barrierManager.barrierHP;
+            damage = damage < 0 ? 0 : damage;
+            coreScript.Damage(damage);
+
 
             collision.gameObject.SetActive(false);
         }

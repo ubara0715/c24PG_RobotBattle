@@ -14,10 +14,9 @@ public class EnemyHealth : MonoBehaviour
     public Text healthText;
     public Text armorText;
 
-    // Optional: Critical hit settings
-    public float critChance = 0.2f; // 20% chance
+    public float critChance = 0.2f; 
     public float critMultiplier = 1.5f;
-    public GameObject criticalHitText; // Assign in Inspector if used
+    public GameObject criticalHitText;
 
     void Start()
     {
@@ -26,7 +25,7 @@ public class EnemyHealth : MonoBehaviour
         UpdateUI();
 
         if (criticalHitText != null)
-            criticalHitText.SetActive(false); // Hide crit popup by default
+            criticalHitText.SetActive(false);
     }
 
     void OnCollisionEnter(Collision collision)
