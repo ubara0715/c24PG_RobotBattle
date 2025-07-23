@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class EnergyBulletScript : MonoBehaviour
 {
-    // パーティクル修正、カラー変更
+    // カラー変更
+
+    // 武器スクリプト
+    EnergyGearScript energyGear;
 
     // ダメージ計算
     float range = 0;
@@ -13,14 +16,23 @@ public class EnergyBulletScript : MonoBehaviour
     [HideInInspector] public float speed_clone;
 
     // カラー変更
-    Color color;
+    /*
+    ParticleSystem.MainModule main;
     ParticleSystem ps;
+    */
 
     // メソッド
+    void Start()
+    {
+        //main = ps.main;
+    }
+
     void Awake()
     {
-        ps = GetComponent<ParticleSystem>();
+        energyGear = transform.parent.GetComponent<EnergyGearScript>();
+        //ps = GetComponent<ParticleSystem>();
         FilghtDistance();
+        //SwitchColor();
     }
 
     void Update()
@@ -69,6 +81,30 @@ public class EnergyBulletScript : MonoBehaviour
         range += speed_clone * Time.fixedDeltaTime;
         Invoke("FilghtDistance", Time.deltaTime);
     }
+
+
+    // 保留
+    /*
+    void SwitchColor()
+    {
+        if(usedEnergy_clone <= 25.0f)
+        {
+            //main.startColor = new ParticleSystem.MinMaxGradient(Color.green);
+        }
+        else if(usedEnergy_clone <= energyGear.usedMax * 0.3)
+        {
+            // 青色
+        }
+        else if(usedEnergy_clone <= energyGear.usedMax * 0.6)
+        {
+            // 白色
+        }
+        else
+        {
+            // 黄色
+        }
+    }
+    */
 
     //開発段階
     /*

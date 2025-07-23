@@ -10,14 +10,15 @@ public class EnergyGearScript : MonoBehaviour
     [Header("上手く発射できないなぁと思ったら調整してください")] public float instantiatePos = 1.1f;
     CoreScript core;
 
-    int usedMax = 50;
+    [HideInInspector]public float usedMax = 100.0f;
+    [HideInInspector]public float usedMin = 10.0f;
     public float speed = 100.0f;
 
     // メソッド
     void Start()
     {
         core = transform.parent.GetComponent<CoreScript>();
-        core.AddWeight(usedMax);
+        core.AddWeight((int)usedMax);
     }
 
     // public関数
