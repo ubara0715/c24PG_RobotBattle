@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using UnityEngine;
 
 public class LiveGunOriginScript : MonoBehaviour
@@ -20,7 +21,12 @@ public class LiveGunOriginScript : MonoBehaviour
 
     bool isRunningFire = false;//発射処理のコルーチンが動いているか
 
-    public GameObject gunObj;//銃本体のオブジェクト(親オブジェクト)
+    bool isForcus = false;//TargetLookのコルーチンが動いているか
+
+    public GameObject gunObj;//銃本体のオブジェクト
+    public GameObject gunRootObj;//親オブジェクト
+
+    GameObject targetEnemy;
 
     [SerializeField] GameObject bulletObj;//弾のプレハブオブジェクト
     public List<GameObject> unUsedBulletList = new List<GameObject>();//残弾用リスト
@@ -32,9 +38,13 @@ public class LiveGunOriginScript : MonoBehaviour
     public EnergyScript energySC;//エネルギースクリプト
     public CoreScript coreSC;//コアスクリプト
 
+    /// <summary>
+    /// Startの変わりに継承先から呼ぶ準備関数
+    /// </summary>
     public void Preparation()
     {
         gunObj = transform.parent.gameObject;
+        gunRootObj = gunObj.transform.parent.gameObject;
 
         //弾プレハブを装弾数×2個分用意
         unUsedBulletList = BulletInst(bulletAmount);
@@ -53,7 +63,10 @@ public class LiveGunOriginScript : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// 弾プレハブを装弾数分用意する
+    /// </summary>
+    /// <param name="amount">装弾数</param>
     List<GameObject> BulletInst(int amount)
     {
         var bulletList = new List<GameObject>();
@@ -72,19 +85,25 @@ public class LiveGunOriginScript : MonoBehaviour
     }
 
 
-    //球発射関数
+    ///<summary>
+    ///球発射関数
+    ///</summary>
+    ///<param name="targetObj">ターゲットオブジェクト</param>
     public IEnumerator Fire(GameObject targetObj = null)
     {
-
         //コルーチン重複防止
         if (isRunningFire || isReload)
         {
             yield break;
         }
 
-        isRunningFire = true;
+        isRunningFire = true;//処理始動
 
-        //TargetLook(targetObj);
+        if (!isForcus)//コルーチン処理中じゃなかったら
+        {
+            targetEnemy = targetObj;//ターゲットを取得
+            StartCoroutine(TargetLook());//ターゲットに銃口を向ける
+        }
 
         //残弾があれば撃つ
         if (unUsedBulletList.Count > 0 && energySC.UseEnergy(fireEnergyReq))
@@ -145,11 +164,13 @@ public class LiveGunOriginScript : MonoBehaviour
         }
         yield return new WaitForSeconds(1f / fireRate);//発射間隔分待つ
 
-        isRunningFire = false;
+        isRunningFire = false;//処理終了
 
     }
 
-    //リロード関数
+    /// <summary>
+    /// リロード関数
+    /// </summary>
     IEnumerator Reload()
     {
         yield return new WaitForSeconds(reloadTime);//リロード時間
@@ -167,36 +188,38 @@ public class LiveGunOriginScript : MonoBehaviour
         isReload = false;
     }
 
-    //bool TargetLook(GameObject targetObj)
-    //{
-    //    if (targetObj != null)
-    //    {
-            
+    /// <summary>
+    /// ターゲットに銃口を向ける
+    /// </summary>
+    IEnumerator TargetLook()
+    {
+        if (targetEnemy != null)
+        {
+            while (true)
+            {
+                Vector3 targetDir = targetEnemy.transform.position - gunRootObj.transform.position;//ターゲットの方向
+                float angle = Vector3.Angle(targetDir, gunRootObj.transform.forward);//銃本体とターゲットの方向の差分
+                Quaternion targetRot = Quaternion.LookRotation(targetDir.normalized);//ターゲットの方向までの角度
 
-    //        //現在の銃本体の回転の値を取得
-    //        Vector3 movedAngle = new Vector3(gunObj.transform.localEulerAngles.x, gunObj.transform.localEulerAngles.y);
-    //        movedAngle.x = movedAngle.x <= 180f ? Mathf.Abs(movedAngle.x) : Mathf.Abs(movedAngle.x - 360f);//X軸
-    //        movedAngle.y = movedAngle.y <= 180f ? Mathf.Abs(movedAngle.y) : Mathf.Abs(movedAngle.y - 360f);//Y軸
-            
+                //差分が22.5度以下だったら
+                if (angle <= 22.5f)
+                {
+                    isForcus = true;
 
-    //        Vector3 targetDir = targetObj.transform.position - gunObj.transform.position;//ターゲットの方向
-    //        float angle = Vector3.Angle(targetDir, gunObj.transform.forward);//銃本体とターゲットの方向の差分
-
-    //        Debug.Log($"{angle - movedAngle.x} + {angle - movedAngle.y}");
-
-    //        if (angle - movedAngle.x <= 22.5f && angle - movedAngle.y <= 22.5f)
-    //        {
-    //            gunObj.transform.LookAt(targetObj.transform, Vector3.forward);
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
+                    //ターゲットの方向まで滑らかに回転
+                    gunObj.transform.rotation = Quaternion.Slerp(
+                        gunObj.transform.rotation,
+                        targetRot,
+                        0.2f
+                        );
+                }
+                else
+                {
+                    isForcus = false;
+                    break;
+                }
+                yield return null;//1フレーム待つ
+            }
+        }
+    }
 }
