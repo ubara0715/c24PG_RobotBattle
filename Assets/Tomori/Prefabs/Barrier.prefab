@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6562928939063489489}
   - component: {fileID: 4572114862767938302}
   - component: {fileID: 2438506133392843704}
-
   - component: {fileID: -8260972860095554820}
   m_Layer: 0
   m_Name: Barrier
@@ -107,7 +106,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
-
 --- !u!114 &-8260972860095554820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +113,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332427518970735433}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 003a3d7d5aed65f48a797ef738b4e5d7, type: 3}
   m_Name: 
