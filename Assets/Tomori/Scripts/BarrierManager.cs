@@ -50,6 +50,12 @@ public class BarrierManager : MonoBehaviour
         {
             KeepBarrier();
         }
+
+        if (isBarrier && currentBarrier != null)
+        {
+            currentBarrier.transform.position = playerTR.position;
+            currentBarrier.transform.rotation = playerTR.rotation;
+        }
     }
 
     //バリアをtrueにする
@@ -97,11 +103,13 @@ public class BarrierManager : MonoBehaviour
         }
 
         float maxSize = Mathf.Max(combinedBounds.size.x, combinedBounds.size.y, combinedBounds.size.z);
+        float uniformScale = maxSize * sizeMultiplier;
 
-        currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity, playerTR);
-        currentBarrier.transform.localScale = Vector3.one * maxSize * sizeMultiplier;
+        // 親なしで生成
+        currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity);
+        currentBarrier.transform.localScale = Vector3.one * uniformScale;
 
-        detectionRadius = maxSize * sizeMultiplier * 1.1f;//バリアの大きさに合わせて検出範囲の半径も大きく
+        detectionRadius = uniformScale * 1.1f;//バリアの検出範囲も合わせる
 
         barrierScript = currentBarrier.GetComponent<BarrierScript>();
         barrierScript.coreScript = coreScript;
