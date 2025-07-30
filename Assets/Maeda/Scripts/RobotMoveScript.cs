@@ -55,7 +55,9 @@ public class RobotMoveScript : MonoBehaviour
         if (!isTarget)
         {
             targetObj.transform.position = new Vector3(
-                Random.Range(-100, 100), Random.Range(1, 10), Random.Range(-100, 100)
+                Random.Range(-100, 100), 
+                Random.Range(1, 10), 
+                Random.Range(-100, 100)
                 );
 
             isTarget = true;
@@ -72,7 +74,7 @@ public class RobotMoveScript : MonoBehaviour
  
     public void MoveUp()//上移動
     {
-        robotRB.AddForce(transform.up * jumpForce, ForceMode.Force);
+        robotRB.AddForce(Vector3.up * jumpForce, ForceMode.Force);
 
         if (robotRB.velocity.y > maxSpeed)
         {
@@ -91,8 +93,8 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
-            if (transform.position.y - targetOBJ.transform.position.y <= 0
-                && energyScript.UseEnergy(0.1f)) 
+            if (transform.position.y - targetOBJ.transform.position.y < -1
+                && energyScript.UseEnergy(0.1f))
             {
                 MoveUp();
             }
@@ -105,14 +107,15 @@ public class RobotMoveScript : MonoBehaviour
                 && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
                 break;
 
-            direction.y = 0;//xz平面で移動する
+            //xz平面の移動ベクトルを計算
+            Vector3 horizontalDir = new Vector3(direction.x, 0, direction.z);
 
-            if (Mathf.Abs(direction.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
-                || Mathf.Abs(direction.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
+            if (Mathf.Abs(horizontalDir.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+                || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
                 && energyScript.UseEnergy(0.01f))
             {
                 //自分から相手の方向にAddForce
-                robotRB.AddForce(direction.normalized * moveForce, ForceMode.Force);
+                robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
                 
                 //速度チェック
                 CheckVelocity();
@@ -127,7 +130,7 @@ public class RobotMoveScript : MonoBehaviour
             }
             else
             {
-                robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
+                //robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
             }
 
             yield return null;
