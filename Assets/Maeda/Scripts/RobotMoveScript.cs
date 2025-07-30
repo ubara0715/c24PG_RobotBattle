@@ -9,8 +9,10 @@ public class RobotMoveScript : MonoBehaviour
     [SerializeField, Header("エネルギー管理スクリプト")]
     EnergyScript energyScript;
 
-    [SerializeField]
-    GameObject sphere;//テスト用
+    [SerializeField,Header("テスト用の敵オブジェクト")]//後で消す
+    GameObject enemy;
+    [SerializeField, Header("ランダム移動ターゲット")]
+    GameObject targetObj;
 
     //ロボットのRigidbody
     Rigidbody robotRB;
@@ -26,21 +28,39 @@ public class RobotMoveScript : MonoBehaviour
     
     //回転制御bool
     bool isRotate = false;
+    //追従制御bool
+    bool isTarget = false;
+
+    //移動中コルーチン
+    Coroutine _moveTarget;
 
     void Start()
     {
         robotRB = GetComponent<Rigidbody>();
         
         SetMass();
-
-        //テスト用
-        StartCoroutine(MoveTarget(sphere));
     }
 
     void Update()
     {
-        //テスト用
-        if (Input.GetKey(KeyCode.Space)) MoveUp();
+        //テスト用(レーダーに敵が移った想定)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isTarget = true;
+            StopCoroutine(_moveTarget);
+            _moveTarget = StartCoroutine(MoveTarget(enemy));    
+        }
+
+        //ターゲットがいないとき
+        if (!isTarget)
+        {
+            targetObj.transform.position = new Vector3(
+                Random.Range(-100, 100), Random.Range(1, 10), Random.Range(-100, 100)
+                );
+
+            isTarget = true;
+            _moveTarget = StartCoroutine(MoveTarget(targetObj));
+        }
     }
 
     //機体の質量を設定(機体の重量が変わるたびにCoreScriptから呼ぶ)
@@ -49,8 +69,8 @@ public class RobotMoveScript : MonoBehaviour
         //CoreScriptの重量変数をロボットの質量とする
         robotRB.mass = coreScript.weight;
     }
-
-    public void MoveUp()//ジャンプ
+ 
+    public void MoveUp()//上移動
     {
         robotRB.AddForce(transform.up * jumpForce, ForceMode.Force);
 
@@ -71,7 +91,7 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
-            if (transform.position.y - targetOBJ.transform.position.y <= -1
+            if (transform.position.y - targetOBJ.transform.position.y <= 0
                 && energyScript.UseEnergy(0.1f)) 
             {
                 MoveUp();
@@ -114,6 +134,8 @@ public class RobotMoveScript : MonoBehaviour
         }
 
         robotRB.velocity = Vector3.zero;
+
+        isTarget = false;
     }
 
     //移動速度の調整
