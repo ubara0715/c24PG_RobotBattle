@@ -92,20 +92,27 @@ public class BarrierManager : MonoBehaviour
         if (renderers.Length == 0) return;
 
         Bounds combinedBounds = renderers[0].bounds;
-
         for (int i = 1; i < renderers.Length; i++)
         {
             combinedBounds.Encapsulate(renderers[i].bounds);
         }
 
+        // 一番大きい軸方向を取得
         float maxSize = Mathf.Max(combinedBounds.size.x, combinedBounds.size.y, combinedBounds.size.z);
+
+        // サイズ倍率をかけて、バリアのスケールを決定
         float uniformScale = maxSize * sizeMultiplier;
 
-        // 親なしで生成
+        //バリアの強度を設定(最大30)
+        float hpMultiplier = 2.3f;
+        barrierHP = Mathf.Clamp((int)(uniformScale * hpMultiplier), 1, 30);
+
+        // バリアを生成
         currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity);
         currentBarrier.transform.localScale = Vector3.one * uniformScale;
 
-        detectionRadius = uniformScale * 1.1f;//バリアの検出範囲も合わせる
+        // バリアの検出半径を設定
+        detectionRadius = uniformScale * 1.1f;
 
         barrierScript = currentBarrier.GetComponent<BarrierScript>();
         barrierScript.coreScript = coreScript;
