@@ -29,7 +29,7 @@ public class EnergyBulletScript : MonoBehaviour
 
     void Awake()
     {
-        energyGear = transform.parent.GetComponent<EnergyGearScript>();
+        energyGear = GetComponentInParent<EnergyGearScript>();
         //ps = GetComponent<ParticleSystem>();
         FilghtDistance();
         //SwitchColor();
