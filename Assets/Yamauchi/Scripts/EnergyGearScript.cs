@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 public class EnergyGearScript : MonoBehaviour
 {
-    [SerializeField,Header("エネルギー弾のPrefabをアタッチしてください")] GameObject energyBullet;
-    [Header("エネルギープールが付いたObjectをアタッチしてください")] public EnergyScript energyPool;
-    [Header("上手く発射できないなぁと思ったら調整してください")] public float instantiatePos = 1.1f;
+    [SerializeField,Header("エネルギー弾のPrefabを入れてください")] GameObject energyBullet;
+    [Header("エネルギープールが付いたObjectを入れてください")] public EnergyScript energyPool;
+    [Header("生成したObjectをまとめておく空のObjectを入れてください")] public GameObject bulletGroup;
     CoreScript core;
 
     [HideInInspector]public float usedMax = 100.0f;
@@ -30,6 +30,14 @@ public class EnergyGearScript : MonoBehaviour
         // 距離計算してエネルギー使用量を最低限に抑えたい
         float two_distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
 
+        // 方向転換
+        transform.LookAt(target.transform);
+        if(transform.eulerAngles.y < -90.0f || transform.eulerAngles.y > 90.0f)
+        {
+            energyPool.energyAmount += usedEnergy; // 方向転換が90度以上ならエネルギーを消費しない
+            return; // 方向転換が90度以上なら撃たない
+        }
+
         // クローン作成と設定、Componentの取得
         GameObject clone = EnergyBullet_clone();
 
@@ -37,7 +45,7 @@ public class EnergyGearScript : MonoBehaviour
         EnergyBulletScript bulletSc = clone.GetComponent<EnergyBulletScript>();
         bulletSc.usedEnergy_clone = usedEnergy;
         bulletSc.speed_clone = speed;
-        clone.transform.parent = gameObject.transform;
+        clone.transform.parent = bulletGroup.transform;
 
         // 撃ちだす
         Shot(rb_clone);
@@ -46,7 +54,8 @@ public class EnergyGearScript : MonoBehaviour
     // privert関数
     GameObject EnergyBullet_clone()
     {
-        Vector3 instPos = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + instantiatePos);
+        //Vector3 instPos = new Vector3(transform.parent.localPosition.x + transform.position.x, transform.parent.localPosition.y + transform.position.y, transform.parent.localPosition.z + instantiatePos);
+        Vector3 instPos = (transform.position + transform.forward);
 
         GameObject energyBullet_clone =
             Instantiate(

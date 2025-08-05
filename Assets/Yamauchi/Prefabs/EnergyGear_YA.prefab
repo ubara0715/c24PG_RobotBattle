@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1982905968302267911}
   - component: {fileID: 836444846996809147}
   - component: {fileID: 2691467985878645205}
-  - component: {fileID: 5826995804853980370}
   m_Layer: 0
   m_Name: EnergyGear_YA
   m_TagString: Untagged
@@ -52,6 +51,8 @@ MonoBehaviour:
   energyBullet: {fileID: 1018266170718575047, guid: 4ce0168340ce75248b19c39fbb5ce226, type: 3}
   energyPool: {fileID: 0}
   instantiatePos: 1.1
+  usedMax: 100
+  usedMin: 10
   speed: 100
 --- !u!33 &6577211630620175066
 MeshFilter:
@@ -153,42 +154,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!59 &5826995804853980370
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125682158915574702}
-  m_ConnectedBody: {fileID: 0}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_Axis: {x: 0, y: 0, z: 1}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 1.101, z: 0}
-  serializedVersion: 2
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 1
-  m_ExtendedLimits: 0
-  m_UseAcceleration: 0
-  m_Limits:
-    min: -90
-    max: 90
-    bounciness: 0
-    bounceMinVelocity: 0
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
