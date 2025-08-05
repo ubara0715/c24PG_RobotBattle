@@ -10,7 +10,7 @@ public class BarrierManager : MonoBehaviour
     public int barrierHP = 15;
     Collider[] bullets;
     public bool isBarrier = false;
-    EnergyScript energyScript;
+    [SerializeField] EnergyScript energyScript;
 
     Transform playerTR;
     [SerializeField] GameObject barrier;
@@ -18,7 +18,7 @@ public class BarrierManager : MonoBehaviour
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
     //[SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     //[SerializeField, Header("球のレイヤー")] LayerMask bulletLayer;
-    BarrierScript barrierScript;
+    [SerializeField] BarrierScript barrierScript;
 
     public CoreScript coreScript;
 
@@ -42,13 +42,15 @@ public class BarrierManager : MonoBehaviour
 
     void Update()
     {
-        //detectionCenter = playerTR.localPosition;
-
-        //bullets = Physics.OverlapSphere(detectionCenter, detectionRadius, bulletLayer);
-
         if (isBarrier)
         {
             KeepBarrier();
+        }
+
+        if (isBarrier && currentBarrier != null)
+        {
+            currentBarrier.transform.position = playerTR.position;
+            currentBarrier.transform.rotation = playerTR.rotation;
         }
     }
 
@@ -90,18 +92,27 @@ public class BarrierManager : MonoBehaviour
         if (renderers.Length == 0) return;
 
         Bounds combinedBounds = renderers[0].bounds;
-
         for (int i = 1; i < renderers.Length; i++)
         {
             combinedBounds.Encapsulate(renderers[i].bounds);
         }
 
+        // 一番大きい軸方向を取得
         float maxSize = Mathf.Max(combinedBounds.size.x, combinedBounds.size.y, combinedBounds.size.z);
 
-        currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity, playerTR);
-        currentBarrier.transform.localScale = Vector3.one * maxSize * sizeMultiplier;
+        // サイズ倍率をかけて、バリアのスケールを決定
+        float uniformScale = maxSize * sizeMultiplier;
 
-        detectionRadius = maxSize * sizeMultiplier * 1.1f;//バリアの大きさに合わせて検出範囲の半径も大きく
+        //バリアの強度を設定(最大30)
+        float hpMultiplier = 2.3f;
+        barrierHP = Mathf.Clamp((int)(uniformScale * hpMultiplier), 1, 30);
+
+        // バリアを生成
+        currentBarrier = Instantiate(barrier, playerTR.position, Quaternion.identity);
+        currentBarrier.transform.localScale = Vector3.one * uniformScale;
+
+        // バリアの検出半径を設定
+        detectionRadius = uniformScale * 1.1f;
 
         barrierScript = currentBarrier.GetComponent<BarrierScript>();
         barrierScript.coreScript = coreScript;

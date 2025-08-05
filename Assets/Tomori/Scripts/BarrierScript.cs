@@ -12,9 +12,11 @@ public class BarrierScript : MonoBehaviour
         int Barrier = LayerMask.NameToLayer("Barrier");
         int Floor = LayerMask.NameToLayer("Floor");
         int Player = LayerMask.NameToLayer("Player");
+        int BarrierManager = LayerMask.NameToLayer("BarrierManager");
 
         Physics.IgnoreLayerCollision(Barrier, Floor);
         Physics.IgnoreLayerCollision(Barrier, Player);
+        Physics.IgnoreLayerCollision(Barrier, BarrierManager);
     }
 
     //ダメージを計算するためにtriggerを使う（playerのisTriggerをtrue）

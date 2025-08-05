@@ -9,8 +9,10 @@ public class RobotMoveScript : MonoBehaviour
     [SerializeField, Header("エネルギー管理スクリプト")]
     EnergyScript energyScript;
 
-    [SerializeField]
-    GameObject sphere;//テスト用
+    [SerializeField,Header("テスト用の敵オブジェクト")]//後で消す
+    GameObject enemy;
+    [SerializeField, Header("ランダム移動ターゲット")]
+    GameObject targetObj;
 
     //ロボットのRigidbody
     Rigidbody robotRB;
@@ -26,21 +28,41 @@ public class RobotMoveScript : MonoBehaviour
     
     //回転制御bool
     bool isRotate = false;
+    //追従制御bool
+    bool isTarget = false;
+
+    //移動中コルーチン
+    Coroutine _moveTarget;
 
     void Start()
     {
         robotRB = GetComponent<Rigidbody>();
         
         SetMass();
-
-        //テスト用
-        StartCoroutine(MoveTarget(sphere));
     }
 
     void Update()
     {
-        //テスト用
-        if (Input.GetKey(KeyCode.Space)) MoveUp();
+        //テスト用(レーダーに敵が移った想定)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isTarget = true;
+            StopCoroutine(_moveTarget);
+            _moveTarget = StartCoroutine(MoveTarget(enemy));    
+        }
+
+        //ターゲットがいないとき
+        if (!isTarget)
+        {
+            targetObj.transform.position = new Vector3(
+                Random.Range(-100, 100), 
+                Random.Range(1, 10), 
+                Random.Range(-100, 100)
+                );
+
+            isTarget = true;
+            _moveTarget = StartCoroutine(MoveTarget(targetObj));
+        }
     }
 
     //機体の質量を設定(機体の重量が変わるたびにCoreScriptから呼ぶ)
@@ -49,10 +71,10 @@ public class RobotMoveScript : MonoBehaviour
         //CoreScriptの重量変数をロボットの質量とする
         robotRB.mass = coreScript.weight;
     }
-
-    public void MoveUp()//ジャンプ
+ 
+    public void MoveUp()//上移動
     {
-        robotRB.AddForce(transform.up * jumpForce, ForceMode.Force);
+        robotRB.AddForce(Vector3.up * jumpForce, ForceMode.Force);
 
         if (robotRB.velocity.y > maxSpeed)
         {
@@ -71,28 +93,30 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
-            if (transform.position.y - targetOBJ.transform.position.y <= -1
-                && energyScript.UseEnergy(0.1f)) 
+            //自分とターゲット間のベクトルを計算
+            Vector3 direction = targetOBJ.transform.position - transform.position;
+
+            //上方移動
+            if (transform.position.y - targetOBJ.transform.position.y < -1
+                && energyScript.UseEnergy(0.1f))
             {
                 MoveUp();
             }
 
-            Vector3 direction = targetOBJ.transform.position - transform.position;
-
             //ターゲットに近づいたら終了(仮条件)
-            if (Mathf.Abs(direction.x) < (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
-                && Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
-                && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
+            if (Mathf.Abs(direction.x) <= (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+                && Mathf.Abs(direction.y) <= (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
+                && Mathf.Abs(direction.z) <= (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
                 break;
 
-            direction.y = 0;//xz平面で移動する
+            //xz平面の移動ベクトルを計算
+            Vector3 horizontalDir = new Vector3(direction.x, 0, direction.z);
 
-            if (Mathf.Abs(direction.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
-                || Mathf.Abs(direction.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
+            if (Mathf.Abs(horizontalDir.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+                || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
                 && energyScript.UseEnergy(0.01f))
             {
-                //自分から相手の方向にAddForce
-                robotRB.AddForce(direction.normalized * moveForce, ForceMode.Force);
+                robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
                 
                 //速度チェック
                 CheckVelocity();
@@ -107,13 +131,15 @@ public class RobotMoveScript : MonoBehaviour
             }
             else
             {
-                robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
+                //robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
             }
 
             yield return null;
         }
 
         robotRB.velocity = Vector3.zero;
+
+        isTarget = false;
     }
 
     //移動速度の調整
