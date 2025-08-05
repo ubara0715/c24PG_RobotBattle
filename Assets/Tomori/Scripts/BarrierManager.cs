@@ -10,7 +10,7 @@ public class BarrierManager : MonoBehaviour
     public int barrierHP = 15;
     Collider[] bullets;
     public bool isBarrier = false;
-    EnergyScript energyScript;
+    [SerializeField] EnergyScript energyScript;
 
     Transform playerTR;
     [SerializeField] GameObject barrier;
@@ -18,7 +18,7 @@ public class BarrierManager : MonoBehaviour
     [SerializeField, Header("検出範囲の半径")] float detectionRadius;
     //[SerializeField, Header("プレイヤーの位置")] Vector3 detectionCenter;  // 検出の中心点（プレイヤーの位置)）
     //[SerializeField, Header("球のレイヤー")] LayerMask bulletLayer;
-    BarrierScript barrierScript;
+    [SerializeField] BarrierScript barrierScript;
 
     public CoreScript coreScript;
 
