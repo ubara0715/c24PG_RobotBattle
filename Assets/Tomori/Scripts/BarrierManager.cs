@@ -42,10 +42,6 @@ public class BarrierManager : MonoBehaviour
 
     void Update()
     {
-        //detectionCenter = playerTR.localPosition;
-
-        //bullets = Physics.OverlapSphere(detectionCenter, detectionRadius, bulletLayer);
-
         if (isBarrier)
         {
             KeepBarrier();
