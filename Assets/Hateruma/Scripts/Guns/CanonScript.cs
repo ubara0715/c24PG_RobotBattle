@@ -33,8 +33,8 @@ public class CannonScript : LiveGunOriginScript
         }
 
         //X²‚ÆY²‚Ì‰ñ“]‚ğ45“x‚Ì”ÍˆÍ‚Å§ŒÀ
-        angle.x = Mathf.Clamp(angle.x, -22.5f, 22.5f);
-        angle.y = Mathf.Clamp(angle.y, -22.5f, 22.5f);
+        angle.x = Mathf.Clamp(angle.x, -gunAngleLimit, gunAngleLimit);
+        angle.y = Mathf.Clamp(angle.y, -gunAngleLimit, gunAngleLimit);
 
         gunObj.transform.localRotation = Quaternion.Euler(angle);//§ŒÀ‚³‚ê‚½Šp“x‚ğ“ü‚ê‚é
 

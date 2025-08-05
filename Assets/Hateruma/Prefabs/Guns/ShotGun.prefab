@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2680991959344296473}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.5649757, y: 23.298826, z: -37.188446}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 5712768269594413019}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.103977, y: -28.138174, z: 39.668446}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -186,11 +186,13 @@ MonoBehaviour:
   fireRate: 0
   bulletSpeed: 0
   fireRange: 0
+  gunAngleLimit: 45
   reloadTime: 0
   fireEnergyReq: 0
   reloadEnergyReq: 0
   isShotGun: 0
   gunObj: {fileID: 0}
+  gunRootObj: {fileID: 0}
   bulletObj: {fileID: 2786622016097322360, guid: 29e24293a05a8254aad7523203f5e384, type: 3}
   unUsedBulletList: []
   usedBulletList: []

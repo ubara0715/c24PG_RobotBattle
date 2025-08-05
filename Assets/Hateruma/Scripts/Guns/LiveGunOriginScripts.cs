@@ -11,9 +11,11 @@ public class LiveGunOriginScript : MonoBehaviour
     public float fireRate;//発射速度
     public float bulletSpeed;//弾速
     public float fireRange;//射程
+    public float gunAngleLimit = 45f;//射界
     public float reloadTime;//リロード時間
     public int fireEnergyReq;//必要エネルギー(1発あたり)
     public int reloadEnergyReq;//必要エネルギー(リロード時)
+   
 
     public bool isShotGun = false;//ショットガンかどうか
 
@@ -202,7 +204,7 @@ public class LiveGunOriginScript : MonoBehaviour
                 Quaternion targetRot = Quaternion.LookRotation(targetDir.normalized);//ターゲットの方向までの角度
 
                 //差分が22.5度以下だったら
-                if (angle <= 22.5f)
+                if (angle <= 45f)
                 {
                     isForcus = true;
 
@@ -210,7 +212,7 @@ public class LiveGunOriginScript : MonoBehaviour
                     gunObj.transform.rotation = Quaternion.Slerp(
                         gunObj.transform.rotation,
                         targetRot,
-                        0.2f
+                        5 * Time.deltaTime
                         );
                 }
                 else

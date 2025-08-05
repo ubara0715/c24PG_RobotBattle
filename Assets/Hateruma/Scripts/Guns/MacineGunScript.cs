@@ -35,8 +35,8 @@ public class MacineGunScript : LiveGunOriginScript
         }
 
         //X軸とY軸の回転を45度の範囲で制限
-        angle.x = Mathf.Clamp(angle.x, -22.5f, 22.5f);
-        angle.y = Mathf.Clamp(angle.y, -22.5f, 22.5f);
+        angle.x = Mathf.Clamp(angle.x, -gunAngleLimit, gunAngleLimit);
+        angle.y = Mathf.Clamp(angle.y, -gunAngleLimit, gunAngleLimit);
 
         gunObj.transform.localRotation = Quaternion.Euler(angle);//制限された角度を入れる
 
