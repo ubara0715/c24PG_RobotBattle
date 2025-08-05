@@ -93,18 +93,20 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
+            //自分とターゲット間のベクトルを計算
+            Vector3 direction = targetOBJ.transform.position - transform.position;
+
+            //上方移動
             if (transform.position.y - targetOBJ.transform.position.y < -1
                 && energyScript.UseEnergy(0.1f))
             {
                 MoveUp();
             }
 
-            Vector3 direction = targetOBJ.transform.position - transform.position;
-
             //ターゲットに近づいたら終了(仮条件)
-            if (Mathf.Abs(direction.x) < (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
-                && Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
-                && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
+            if (Mathf.Abs(direction.x) <= (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+                && Mathf.Abs(direction.y) <= (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
+                && Mathf.Abs(direction.z) <= (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
                 break;
 
             //xz平面の移動ベクトルを計算
@@ -114,7 +116,6 @@ public class RobotMoveScript : MonoBehaviour
                 || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
                 && energyScript.UseEnergy(0.01f))
             {
-                //自分から相手の方向にAddForce
                 robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
                 
                 //速度チェック
