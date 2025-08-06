@@ -55,9 +55,9 @@ public class RobotMoveScript : MonoBehaviour
         if (!isTarget)
         {
             targetObj.transform.position = new Vector3(
-                Random.Range(-100, 100), 
+                Random.Range(-50, 50), 
                 Random.Range(1, 10), 
-                Random.Range(-100, 100)
+                Random.Range(-50, 50)
                 );
 
             isTarget = true;
