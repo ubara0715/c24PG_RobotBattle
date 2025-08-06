@@ -28,7 +28,7 @@ public class LiveGunOriginScript : MonoBehaviour
     public GameObject gunObj;//銃本体のオブジェクト
     public GameObject gunRootObj;//親オブジェクト
 
-    GameObject targetEnemy;
+    GameObject targetEnemy;//敵オブジェクト
 
     [SerializeField] GameObject bulletObj;//弾のプレハブオブジェクト
     public List<GameObject> unUsedBulletList = new List<GameObject>();//残弾用リスト
@@ -203,16 +203,16 @@ public class LiveGunOriginScript : MonoBehaviour
                 float angle = Vector3.Angle(targetDir, gunRootObj.transform.forward);//銃本体とターゲットの方向の差分
                 Quaternion targetRot = Quaternion.LookRotation(targetDir.normalized);//ターゲットの方向までの角度
 
-                //差分が22.5度以下だったら
+                //差分が45度以下だったら
                 if (angle <= 45f)
                 {
                     isForcus = true;
 
                     //ターゲットの方向まで滑らかに回転
-                    gunObj.transform.rotation = Quaternion.Slerp(
+                    gunObj.transform.rotation = Quaternion.RotateTowards(
                         gunObj.transform.rotation,
                         targetRot,
-                        5 * Time.deltaTime
+                        90f * Time.deltaTime
                         );
                 }
                 else
@@ -223,5 +223,26 @@ public class LiveGunOriginScript : MonoBehaviour
                 yield return null;//1フレーム待つ
             }
         }
+    }
+
+    public void AngleCheck()
+    {
+        Vector3 angle = gunObj.transform.localEulerAngles;//銃本体の回転を取得
+
+        //0～360になっているのを-180～180にする
+        if (angle.y > 180)
+        {
+            angle.y = angle.y - 360;
+        }
+        if (angle.x > 180)
+        {
+            angle.x = angle.x - 360;
+        }
+
+        //X軸とY軸の回転を45度の範囲で制限
+        angle.x = Mathf.Clamp(angle.x, -gunAngleLimit, gunAngleLimit);
+        angle.y = Mathf.Clamp(angle.y, -gunAngleLimit, gunAngleLimit);
+
+        gunObj.transform.localRotation = Quaternion.Euler(angle);//制限された角度を入れる
     }
 }
