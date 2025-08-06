@@ -27,6 +27,11 @@ public class EnergyGearScript : MonoBehaviour
         // ダメージ計算、減算はBulletの方で行う
         // 値を渡してAddForceを加えるだけ
 
+        if(usedEnergy < usedMin || usedEnergy > usedMax)
+        {
+            return; // 範囲外なら撃たない
+        }
+
         // 距離計算してエネルギー使用量を最低限に抑えたい
         float two_distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
 
@@ -52,12 +57,12 @@ public class EnergyGearScript : MonoBehaviour
     }
 
     // privert関数
-    GameObject EnergyBullet_clone()
+    public GameObject EnergyBullet_clone()
     {
         //Vector3 instPos = new Vector3(transform.parent.localPosition.x + transform.position.x, transform.parent.localPosition.y + transform.position.y, transform.parent.localPosition.z + instantiatePos);
         Vector3 instPos = (transform.position + transform.forward);
 
-        GameObject energyBullet_clone =
+         GameObject energyBullet_clone =
             Instantiate(
                 energyBullet,
                 instPos, //AddForceなので生成位置にモノがあるとうまく発射できない、のでもし発射しないなぁと思ったら調整してね
