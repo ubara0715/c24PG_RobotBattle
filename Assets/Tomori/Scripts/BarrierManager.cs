@@ -104,7 +104,7 @@ public class BarrierManager : MonoBehaviour
         float uniformScale = maxSize * sizeMultiplier;
 
         //バリアの強度を設定(最大30)
-        float hpMultiplier = 2.3f;
+        float hpMultiplier = 1.1f;
         barrierHP = Mathf.Clamp((int)(uniformScale * hpMultiplier), 1, 30);
 
         // バリアを生成
