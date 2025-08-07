@@ -34,10 +34,13 @@ public class RobotMoveScript : MonoBehaviour
     //ˆÚ“®’†ƒRƒ‹[ƒ`ƒ“
     Coroutine _moveTarget;
 
-    void Start()
+    private void Awake()
     {
         robotRB = GetComponent<Rigidbody>();
-        
+    }
+
+    void Start()
+    {  
         SetMass();
     }
 
