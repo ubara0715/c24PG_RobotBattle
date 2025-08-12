@@ -8,7 +8,7 @@ public class BulletScript : MonoBehaviour
 
     bool hit = false;//当たり判定用
 
-    [SerializeField] float mass = 0;//弾丸質量
+    [SerializeField] float mass = 1;//弾丸質量
     int damage = 0;//ダメージ用
     float attenuation = 0;//減衰用
 
