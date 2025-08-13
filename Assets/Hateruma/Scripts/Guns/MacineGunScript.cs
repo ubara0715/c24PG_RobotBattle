@@ -10,7 +10,7 @@ public class MacineGunScript : LiveGunOriginScript
     {
         //MacineGun用にパラメーターを設定
         bulletAmount = 30;
-        bulletSpeed = 5;
+        bulletSpeed = 7.5f;
         fireRate = 6;
         fireRange = 450;
         reloadTime = 2;
