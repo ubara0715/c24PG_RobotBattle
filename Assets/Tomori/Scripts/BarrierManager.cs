@@ -18,7 +18,10 @@ public class BarrierManager : MonoBehaviour
 
     public CoreScript coreScript;
 
-    public const int TISEBA = 100;
+    public const int TISEBA = 10;
+
+    [SerializeField] float barrierTimer = 0f;
+    [SerializeField] float barrierCoolTime = 3f;
 
     private void Awake()
     {
@@ -35,6 +38,11 @@ public class BarrierManager : MonoBehaviour
 
     void Update()
     {
+        if (!isBarrier)
+        {
+            barrierTimer += Time.deltaTime;
+        }
+
         if (isBarrier)
         {
             KeepBarrier();
@@ -49,8 +57,12 @@ public class BarrierManager : MonoBehaviour
 
     public void SetBarrier(float time = 2f)
     {
+        // クールタイム中は発生できない
+        if (barrierTimer < barrierCoolTime)
+            return;
+
         float diameter = currentBarrier.transform.localScale.x;
-        float initialCost = diameter * barrierHP / TISEBA * 2f; // 発生時コスト倍率
+        float initialCost = diameter * barrierHP / TISEBA;
 
         if (energyScript.UseEnergy(initialCost))
         {
@@ -66,6 +78,7 @@ public class BarrierManager : MonoBehaviour
 
     void KeepBarrier()
     {
+        barrierTimer += Time.deltaTime;
         float diameter = currentBarrier.transform.localScale.x;
         float costPerSecond = diameter * barrierHP / TISEBA;
 
@@ -136,6 +149,7 @@ public class BarrierManager : MonoBehaviour
 
     void FalseBarrier()
     {
+        barrierTimer = 0f;
         isBarrier = false;
         currentBarrier.SetActive(false);
     }
