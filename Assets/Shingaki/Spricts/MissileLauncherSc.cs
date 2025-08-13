@@ -17,10 +17,10 @@ public class MissileLauncherSc : MonoBehaviour
     /// ミサイルを生成して発射
     /// </summary>
     /// <param name="target">レーダーで見つけた対象のオブジェクト</param>
-    public void Fire(GameObject target)
+    public void Fire(OpSensorObj targetObj)
     {
         //対象無しの場合返却
-        if (target == null)
+        if (targetObj == null)
         {
             Debug.Log("発射対象が存在しません");
             return;
@@ -31,7 +31,7 @@ public class MissileLauncherSc : MonoBehaviour
             Instantiate(missilePf, gameObject.transform.position, transform.rotation)
                 .GetComponent<MissileBulletSc>();
         //ミサイル弾スクリプトにターゲットオブジェクトを指定
-        bulletCon.SetTargetObj(target);
+        bulletCon.SetTargetObj(targetObj.TargetOBj());
     }
 
     /// <summary>

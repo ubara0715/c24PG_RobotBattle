@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9167640586598608334}
   - component: {fileID: 7906536816417860486}
   - component: {fileID: 2716519503418313469}
+  - component: {fileID: 334819526456702769}
   m_Layer: 0
   m_Name: BulletCollider
   m_TagString: Untagged
@@ -49,7 +50,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -107,6 +108,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &334819526456702769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190746397560895037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4815d61207404564a948f11ae0db845f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderType: 0
 --- !u!1 &2483906978787176467
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +133,7 @@ GameObject:
   - component: {fileID: 2304652257241487168}
   - component: {fileID: 8527801596577265790}
   - component: {fileID: 8065132471244051882}
+  - component: {fileID: 6926748230425005160}
   m_Layer: 0
   m_Name: ExplosionCollider
   m_TagString: Untagged
@@ -212,6 +227,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6926748230425005160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2483906978787176467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4815d61207404564a948f11ae0db845f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderType: 1
 --- !u!1 &9220212333034726805
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,13 +287,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3f60312d4e69f45998cb3954a0c55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterName: Player1
   initalSpeed: 18.3
   accel: 25
   accelLimit: 35.9
   tracking: 0.91
-  explosionArea: 9.3
+  explosionArea: 2.6
   startAccelTime: 0.3
-  trackingTimeLimit: 5
   trackingLimitDistance: 100
   destroyTimeLimit: 10
   explosionTime: 0.3
