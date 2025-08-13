@@ -83,13 +83,16 @@ public class BulletScript : MonoBehaviour
     /// </summary>
     public int GetDamage()
     {
-        damage = (int)(mass * attenuation)*2;
+        damage = (int)(mass * attenuation) * 2;
         return damage;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        BulletHit();//Œ©‚½–Ú‚Æ“–‚½‚è”»’è”ñ•\Ž¦
+        if (collision.gameObject.tag != "Bullet" && collision.gameObject.tag != "Missile" && collision.gameObject.tag != "Energy")
+        {
+            BulletHit();//Œ©‚½–Ú‚Æ“–‚½‚è”»’è”ñ•\Ž¦
+        }
     }
 
     /// <summary>
