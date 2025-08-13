@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc68a6713a797b49951f110e69b1cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterName: 
   usedEnergy_clone: 0
   speed_clone: 0
 --- !u!198 &6257980530777530207
@@ -4905,8 +4906,8 @@ TrailRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1018266170718575047}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 0
@@ -4993,7 +4994,7 @@ TrailRenderer:
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
-    shadowBias: 0.1
+    shadowBias: 0
     generateLightingData: 0
   m_MinVertexDistance: 1
   m_MaskInteraction: 0

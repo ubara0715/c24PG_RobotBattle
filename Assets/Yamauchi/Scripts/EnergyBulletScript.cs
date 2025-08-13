@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnergyBulletScript : MonoBehaviour
 {
-    // カラー変更
+    public string masterName;
 
     // 武器スクリプト
     EnergyGearScript energyGear;
@@ -56,7 +56,7 @@ public class EnergyBulletScript : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Destroy(gameObject);
-        Debug.Log(EnergyDamege());
+        Debug.Log("ダメージ(エネルギー弾)："+EnergyDamege());
     }
 
     // 関数
