@@ -179,7 +179,7 @@ public class RobotMoveScript : MonoBehaviour
                 if (Mathf.Abs(angle) < 5) break;
 
                 //Šp“x‚ª¬‚³‚¢•û‚É‰ñ“]
-                robotRB.AddTorque(transform.up * Mathf.Sign(angle) * rotateForce, ForceMode.Force);
+                robotRB.AddTorque(transform.up * Mathf.Sign(angle) * rotateForce, ForceMode.Acceleration);
             }
 
             yield return null;
