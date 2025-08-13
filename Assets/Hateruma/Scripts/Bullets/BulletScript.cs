@@ -83,7 +83,7 @@ public class BulletScript : MonoBehaviour
     /// </summary>
     public int GetDamage()
     {
-        damage = (int)(mass * attenuation);
+        damage = (int)(mass * attenuation)*damage;
         return damage;
     }
 
