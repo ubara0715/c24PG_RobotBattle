@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MissileBulletSc : MonoBehaviour
 {
+    public string masterName;   //持ち主の名前    
+
     Rigidbody rb;               //弾のRigidbody
     GameObject bulletObj;       //弾丸Object
     GameObject explosionObj;    //爆発Object
@@ -138,25 +140,37 @@ public class MissileBulletSc : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnBulletTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Player"))
+        {
+            //当たった敵機体のCoreScriptを取得
+            CoreScript targetCoreSc = other.GetComponent<CoreScript>();
+            //もし自分の機体なら無視
+            if (targetCoreSc.playerName == masterName) return;
+            HitObject();
+        }
+        
+
         //if (collision.collider.CompareTag("レーザー"))
         //{
         //    DestroyGameObject()
         //}
         //else
         //{
-        HitObject();
+
         //}
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnExplosionTriggerEnter(Collider other)
     {
         //ダメージ付与
         if (other.CompareTag("Player"))
         {
             //当たった敵機体のCoreScriptを取得
             CoreScript targetCoreSc = other.GetComponent<CoreScript>();
+            //もし自分の機体なら無視
+            if (targetCoreSc.playerName == this.masterName) return;
             //機体にバリアや装甲が存在するならダメージを与えない(返却)
             if (CheckBarrier(targetCoreSc) || CheckArmor(targetCoreSc)) return;
             //何もないなら直接本体にダメージを与える
