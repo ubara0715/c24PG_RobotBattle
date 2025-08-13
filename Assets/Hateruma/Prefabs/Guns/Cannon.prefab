@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2011620264619250488}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -49.466007}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -186,11 +186,13 @@ MonoBehaviour:
   fireRate: 0
   bulletSpeed: 0
   fireRange: 0
+  gunAngleLimit: 45
   reloadTime: 0
   fireEnergyReq: 0
   reloadEnergyReq: 0
   isShotGun: 0
   gunObj: {fileID: 0}
+  gunRootObj: {fileID: 0}
   bulletObj: {fileID: 2786622016097322360, guid: 819cb01b3176b9e45af717ba73642347, type: 3}
   unUsedBulletList: []
   usedBulletList: []
