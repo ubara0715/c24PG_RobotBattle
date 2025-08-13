@@ -8,7 +8,7 @@ public class CannonScript : LiveGunOriginScript
     {
         //Cannon用にパラメーターを設定
         bulletAmount = 1;
-        bulletSpeed = 10;
+        bulletSpeed = 3;
         fireRate = 1;
         fireRange = 500;
         reloadTime = 5;

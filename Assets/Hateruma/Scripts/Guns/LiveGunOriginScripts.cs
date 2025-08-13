@@ -30,6 +30,8 @@ public class LiveGunOriginScript : MonoBehaviour
 
     GameObject targetEnemy;//敵オブジェクト
 
+    string masterName;
+
     [SerializeField] GameObject bulletObj;//弾のプレハブオブジェクト
     public List<GameObject> unUsedBulletList = new List<GameObject>();//残弾用リスト
     public List<GameObject> usedBulletList = new List<GameObject>();//使用済みの弾用リスト
@@ -52,6 +54,7 @@ public class LiveGunOriginScript : MonoBehaviour
         unUsedBulletList = BulletInst(bulletAmount);
         usedBulletList = BulletInst(bulletAmount * 2);
 
+        masterName = coreSC.playerName;
 
         //弾のスクリプト取得
         foreach (var list in unUsedBulletList)
