@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: sum_weight
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
       propertyPath: explosionArea
       value: 12
       objectReference: {fileID: 0}

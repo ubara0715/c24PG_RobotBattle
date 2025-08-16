@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 8430125914579080758, guid: 48fdbb62ff976dc49ae2a3b0b2aeae97, type: 3}
     - target: {fileID: 8667126248656364242, guid: 7f3fa32d1d5f6f44285477deea13ba5d, type: 3}
       propertyPath: bulletCount
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8667126248656364242, guid: 7f3fa32d1d5f6f44285477deea13ba5d, type: 3}
       propertyPath: cooldownTime
