@@ -54,8 +54,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.8
+  m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &7906536816417860486
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 1023838974748160368}
   - component: {fileID: 6536016052136446904}
   m_Layer: 0
-  m_Name: MissileBulletBase
+  m_Name: MissileBullet_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,13 +287,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3f60312d4e69f45998cb3954a0c55d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterName: Player1
-  initalSpeed: 18.3
-  accel: 25
-  accelLimit: 35.9
-  tracking: 0.91
-  explosionArea: 2.6
-  startAccelTime: 0.3
+  masterName: 
+  initalSpeed: 15
+  accel: 20
+  accelLimit: 30
+  tracking: 1
+  explosionArea: 10
+  startAccelTime: 0.2
   trackingLimitDistance: 100
   destroyTimeLimit: 10
   explosionTime: 0.3
