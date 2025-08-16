@@ -47,9 +47,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missilePf: {fileID: 9220212333034726805, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+  bulletCount: 0
   bulletNum: 6
   continuousFiringInterval: 0.1
-  cooldownTime: 0
+  cooldownTime: 1
+  weight: 0
+  isTwin: 0
+  isMultiple: 0
 --- !u!33 &1094798112331471236
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ TagManager:
   - Energy
   - Missile
   - Barrier
+  - Ground
   layers:
   - Default
   - TransparentFX
