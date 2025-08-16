@@ -28,6 +28,8 @@ public class MissileBulletSc : MonoBehaviour
     bool isAccel = false;       //‰Á‘¬’†
     float attackRate = 1;       //UŒ‚—Í”{—¦
 
+    public int sum_weight;
+
     public void SetBullet(GameObject target,string name,bool twin = false,bool multiple = false)
     {
         targetObj = target;
@@ -39,7 +41,13 @@ public class MissileBulletSc : MonoBehaviour
     public int GetWeght()
     {
         //d‚³‚ğ•Ô‚· (”š”­—Í*10 + ’ÇÕ—¦ + ‰Á‘¬—¦ + ‘¬“x)/10
-        return (int)((explosionArea * 10 + tracking * 33 + accel + initalSpeed)/(10));
+        return (int)((explosionArea * 20 + tracking * 33 + accel + initalSpeed)/(10));
+    }
+
+    [ContextMenu("SetSumWeight")]
+    public void SetSumWeight()
+    {
+        sum_weight = GetWeght();
     }
 
     public int GetDamage()
