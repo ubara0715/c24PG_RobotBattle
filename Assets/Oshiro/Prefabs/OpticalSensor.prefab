@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8922216788511302011}
   - component: {fileID: 4041242632375085904}
   - component: {fileID: 3062424338688586616}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: OpticalSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d453581c86bef94895e014dc74bec62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 45
+  angle: 90
   coreScript: {fileID: 0}
   sensorSize: 3
   tags:
