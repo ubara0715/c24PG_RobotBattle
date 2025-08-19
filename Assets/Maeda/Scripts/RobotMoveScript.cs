@@ -16,6 +16,8 @@ public class RobotMoveScript : MonoBehaviour
 
     //ロボットのRigidbody
     Rigidbody robotRB;
+    //ロボットの体積
+    float robotValue = 0;
     
     [SerializeField, Header("ジャンプ力")]
     float jumpForce = 1.0f;
@@ -40,7 +42,8 @@ public class RobotMoveScript : MonoBehaviour
     }
 
     void Start()
-    {  
+    {
+        robotValue = transform.localScale.x * transform.localScale.y * transform.localScale.z; 
         SetMass();
     }
 
@@ -72,7 +75,7 @@ public class RobotMoveScript : MonoBehaviour
     public void SetMass()
     {
         //CoreScriptの重量変数をロボットの質量とする
-        robotRB.mass = coreScript.weight;
+        robotRB.mass = Mathf.Sqrt(robotValue + coreScript.weight);
     }
  
     public void MoveUp()//上移動
@@ -101,7 +104,7 @@ public class RobotMoveScript : MonoBehaviour
 
             //上方移動
             if (transform.position.y - targetOBJ.transform.position.y < -1
-                && energyScript.UseEnergy(0.1f))
+                && energyScript.UseEnergy(0.08f))
             {
                 MoveUp();
             }
@@ -117,10 +120,10 @@ public class RobotMoveScript : MonoBehaviour
 
             if (Mathf.Abs(horizontalDir.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
                 || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
-                && energyScript.UseEnergy(0.01f))
+                && energyScript.UseEnergy(0.02f))
             {
                 robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
-                
+
                 //速度チェック
                 CheckVelocity();
 
@@ -136,6 +139,9 @@ public class RobotMoveScript : MonoBehaviour
             {
                 //robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
             }
+
+
+
 
             yield return null;
         }
