@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-
+    public string masterName;
     bool hit = false;//“–‚½‚è”»’è—p
 
     [SerializeField] float mass;//’eŠÛŽ¿—Ê
