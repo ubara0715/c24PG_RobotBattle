@@ -158,15 +158,15 @@ public class RadarSensor : MonoBehaviour
             string sampleName = "";
             if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
             {
-                //sampleName = bullet.masterName;
+                sampleName = bullet.masterName;
             }
             else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
             {
-                //sampleName = energy.masterName;
+                sampleName = energy.masterName;
             }
             else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
             {
-                //sampleName = missile.masterName;
+                sampleName = missile.masterName;
             }
             if (coreScript.playerName == sampleName)
             {
@@ -176,6 +176,9 @@ public class RadarSensor : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// ÉGÉlÉãÉMÅ[è¡îÔ
+    /// </summary>
     private void SensorEnergy()
     {
         if (energyScript.UseEnergy(sensorSize/40f*Time.deltaTime))

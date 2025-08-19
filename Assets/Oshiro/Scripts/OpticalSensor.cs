@@ -261,15 +261,15 @@ public class OpticalSensor : MonoBehaviour
             string sampleName = "";
             if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
             {
-                //sampleName = bullet.masterName;
+                sampleName = bullet.masterName;
             }
             else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
             {
-                //sampleName = energy.masterName;
+                sampleName = energy.masterName;
             }
             else if(otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
             {
-                //sampleName = missile.masterName;
+                sampleName = missile.masterName;
             }
             if (coreScript.playerName == sampleName)
             {
@@ -279,6 +279,9 @@ public class OpticalSensor : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// ÉGÉlÉãÉMÅ[è¡îÔ
+    /// </summary>
     private void SensorEnergy()
     {
         if (energyScript.UseEnergy(sensorSize / 40f * (angle / 90) * Time.deltaTime))
@@ -294,5 +297,24 @@ public class OpticalSensor : MonoBehaviour
                 isReset = false;
             }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rayAngle"></param>
+    /// <returns></returns>
+    public bool CheckWall(float rayAngle)
+    {
+        Vector3 direction = Quaternion.Euler(new Vector3(0, rayAngle, 0)) * coreTf.forward;
+        Debug.DrawRay(coreTf.position, direction * sensorSize / 2, Color.blue);
+        if (Physics.Raycast(coreTf.position, direction, out RaycastHit hit, sensorSize / 2))
+        {
+            if(hit.collider.tag == "Ground")
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
