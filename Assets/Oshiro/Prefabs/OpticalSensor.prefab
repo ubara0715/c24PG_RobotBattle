@@ -119,7 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   angle: 90
+  sensorSize: 40
   coreScript: {fileID: 0}
-  sensorSize: 3
+  targets: []
   tags:
   - Player
+  energyScript: {fileID: 0}
