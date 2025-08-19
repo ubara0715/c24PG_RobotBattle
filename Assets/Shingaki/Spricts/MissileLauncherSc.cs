@@ -19,6 +19,7 @@ public class MissileLauncherSc : MonoBehaviour
     [Header("複数"), SerializeField] bool isMultiple = false;
 
     int sumWeight;
+    int bulletWeight;
     int bulletCountNow;
     bool isCooldown = false;
     bool isEmpty = false;
@@ -37,7 +38,8 @@ public class MissileLauncherSc : MonoBehaviour
     {
         //弾を含めた重さを計算
         sumWeight = weight;
-        sumWeight += missilePf.GetComponent<MissileBulletSc>().GetWeght() * bulletCount;
+        bulletWeight = missilePf.GetComponent<MissileBulletSc>().GetWeght();
+        sumWeight += bulletWeight * bulletCount;
         return sumWeight;
     }
 
@@ -101,6 +103,8 @@ public class MissileLauncherSc : MonoBehaviour
                 else bulletCon.transform.Rotate(UnityEngine.Random.Range(0f, 3f), UnityEngine.Random.Range(35f, 20f), 0);
                 //残弾を減らす
                 bulletCountNow--;
+                //重量からミサイル一発分の重量を減らす
+                core.ReduceWeight(bulletWeight);
             }
         }
         else
@@ -115,6 +119,8 @@ public class MissileLauncherSc : MonoBehaviour
             bulletCon.transform.Rotate(UnityEngine.Random.Range(0f, 3f), UnityEngine.Random.Range(-3f, 3f), 0);
             //残弾を減らす
             bulletCountNow--;
+            //重量からミサイル一発分の重量を減らす
+            core.ReduceWeight(bulletWeight);
         }
 
         //クールタイム経過後にフラグを解除
@@ -149,7 +155,9 @@ public class MissileLauncherSc : MonoBehaviour
 
         for (int i = 0; i < bulletNum; i++)
         {
-            
+            //途中で弾がなくなったら終了
+            if (isEmpty) break;
+
             //対象無しの場合返却
             if (targetList_sumple.Count == 0)
             {
@@ -172,6 +180,9 @@ public class MissileLauncherSc : MonoBehaviour
 
             //残弾を減らす
             bulletCountNow--;
+            //重量からミサイル一発分の重量を減らす
+            core.ReduceWeight(bulletWeight);
+
             //残弾が無くなったら空フラグをオン
             if (bulletCountNow < 1) isEmpty = true;
 
