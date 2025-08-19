@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &795189481911677859
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: accel
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: tracking
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: accelLimit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: sum_weight
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: initalSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: explosionArea
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: explosionTime
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023838974748160368, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: startAccelTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250025289410883668, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220212333034726805, guid: 919a4189aef62b44a986c9d51833328b, type: 3}
+      propertyPath: m_Name
+      value: MissileBullet_Firepower
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 919a4189aef62b44a986c9d51833328b, type: 3}

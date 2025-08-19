@@ -76,30 +76,76 @@ public class RadarSensor : MonoBehaviour
     {
         transform.localScale = Vector3.one * sensorSize;//サイズを設定
         transform.localPosition = Vector3.zero;//ポジションを初期化
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
 
         //設定したタグにオブジェクトが含まれていたら
-        if (tags.Contains(other.gameObject.tag))
+        if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
+            //自身の弾丸かどうか
+            RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
+            if (sampleObj.IsBullet())
+            {
+                if (IsMyBullet(other.gameObject)) return;
+            }
             //ターゲットリストに含まれ、本体のスクリプトに伝える
-            targets.Add(new RadarSensorObj(other.gameObject));
+            targets.Add(sampleObj);
             coreScript.OnRadarSensor(targets, isEnter: true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
+        if (sampleObj.IsBullet())
+        {
+            if (IsMyBullet(other.gameObject)) return;
+        }
 
         //設定したタグにオブジェクトが含まれていたら
-        if (tags.Contains(other.gameObject.tag))
+        if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
 
             //ターゲットリストから除外し、本体のスクリプトに伝える
             targets.RemoveAt(targets.FindIndex(x => x.EqualGameObj(other.gameObject)));
             coreScript.OnRadarSensor(targets, isEnter: false);
         }
+
+
     }
+
+
+    /// <summary>
+    /// 自身の弾丸かどうかを調べる
+    /// </summary>
+    /// <param name="otherObj">接触したオブジェクト</param>
+    /// <returns>自身の弾丸かどうか</returns>
+    private bool IsMyBullet(GameObject otherObj)
+    {
+        if (otherObj.CompareTag("Bullet"))
+        {
+            string sampleName = "";
+            if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
+            {
+                //sampleName = bullet.masterName;
+            }
+            else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
+            {
+                //sampleName = energy.masterName;
+            }
+            else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
+            {
+                //sampleName = missile.masterName;
+            }
+            if (coreScript.playerName == sampleName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

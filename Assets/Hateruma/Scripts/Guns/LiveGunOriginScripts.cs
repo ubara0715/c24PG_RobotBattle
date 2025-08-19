@@ -15,7 +15,7 @@ public class LiveGunOriginScript : MonoBehaviour
     public float reloadTime;//リロード時間
     public int fireEnergyReq;//必要エネルギー(1発あたり)
     public int reloadEnergyReq;//必要エネルギー(リロード時)
-   
+    public int gunWeight;//銃の重さ
 
     public bool isShotGun = false;//ショットガンかどうか
 
@@ -29,6 +29,8 @@ public class LiveGunOriginScript : MonoBehaviour
     public GameObject gunRootObj;//親オブジェクト
 
     GameObject targetEnemy;//敵オブジェクト
+
+    public string playerName;
 
     [SerializeField] GameObject bulletObj;//弾のプレハブオブジェクト
     public List<GameObject> unUsedBulletList = new List<GameObject>();//残弾用リスト
@@ -52,15 +54,20 @@ public class LiveGunOriginScript : MonoBehaviour
         unUsedBulletList = BulletInst(bulletAmount);
         usedBulletList = BulletInst(bulletAmount * 2);
 
+        playerName = coreSC.playerName;
 
         //弾のスクリプト取得
         foreach (var list in unUsedBulletList)
         {
-            unUsedBulletSCList.Add(list.GetComponent<BulletScript>());
+            var item = list.GetComponent<BulletScript>();
+            item.masterName = playerName;
+            unUsedBulletSCList.Add(item);
         }
         foreach (var list in usedBulletList)
         {
-            usedBulletSCList.Add(list.GetComponent<BulletScript>());
+            var item = list.GetComponent<BulletScript>();
+            item.masterName = playerName;
+            usedBulletSCList.Add(item);
         }
     }
 
@@ -75,6 +82,8 @@ public class LiveGunOriginScript : MonoBehaviour
         //弾プレハブを装弾数分用意
         for (int i = 0; i < amount; i++)
         {
+            
+
             bulletList.Add(
             Instantiate(
                 bulletObj,

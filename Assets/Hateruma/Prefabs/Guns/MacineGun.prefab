@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 3230096474367960576}
   - component: {fileID: 4318968649771054106}
   - component: {fileID: 1556131780910909577}
-  - component: {fileID: 1429710706378500628}
   m_Layer: 0
   m_Name: MacineGun_Obj
   m_TagString: Untagged
@@ -117,27 +116,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1429710706378500628
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3920292911105336394}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6296458053663942936
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 6296458053663942936}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -186,11 +164,13 @@ MonoBehaviour:
   fireRate: 0
   bulletSpeed: 0
   fireRange: 0
+  gunAngleLimit: 45
   reloadTime: 0
   fireEnergyReq: 0
   reloadEnergyReq: 0
   isShotGun: 0
   gunObj: {fileID: 0}
+  gunRootObj: {fileID: 0}
   bulletObj: {fileID: 2786622016097322360, guid: b0d04d47af6b11049b4ab3f6bb69e984, type: 3}
   unUsedBulletList: []
   usedBulletList: []
@@ -198,4 +178,3 @@ MonoBehaviour:
   usedBulletSCList: []
   energySC: {fileID: 0}
   coreSC: {fileID: 0}
-  targetObj: {fileID: 0}

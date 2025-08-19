@@ -10,9 +10,10 @@ public class EnergyGearScript : MonoBehaviour
     [Header("生成したObjectをまとめておく空のObjectを入れてください")] public GameObject bulletGroup;
     CoreScript core;
 
-    [HideInInspector]public float usedMax = 100.0f;
-    [HideInInspector]public float usedMin = 10.0f;
+    public float usedMax = 100.0f;
+    public float usedMin = 10.0f;
     public float speed = 100.0f;
+
 
     // メソッド
     void Start()
@@ -22,6 +23,11 @@ public class EnergyGearScript : MonoBehaviour
     }
 
     // public関数
+    /// <summary>
+    /// エネルギー弾を発射する関数、威力変更可能
+    /// </summary>
+    /// <param name="usedEnergy">威力、数値そのまま威力になる</param>
+    /// <param name="target">ターゲット、センサーで感知したオブジェクトを入れる予定</param>
     public void ShotEnergy(int usedEnergy,GameObject target)
     {
         // ダメージ計算、減算はBulletの方で行う
@@ -51,6 +57,7 @@ public class EnergyGearScript : MonoBehaviour
         bulletSc.usedEnergy_clone = usedEnergy;
         bulletSc.speed_clone = speed;
         clone.transform.parent = bulletGroup.transform;
+        clone.name = "EnergyBullet_" + core.playerName;
 
         // 撃ちだす
         Shot(rb_clone);

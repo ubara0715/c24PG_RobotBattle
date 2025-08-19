@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-
+    public string masterName;
     bool hit = false;//当たり判定用
 
-    [SerializeField] float mass = 0;//弾丸質量
+    [SerializeField] float mass;//弾丸質量
     int damage = 0;//ダメージ用
     float attenuation = 0;//減衰用
 
@@ -83,13 +83,16 @@ public class BulletScript : MonoBehaviour
     /// </summary>
     public int GetDamage()
     {
-        damage = (int)(mass * attenuation);
+        damage = (int)(mass * attenuation * 2);
         return damage;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        BulletHit();//見た目と当たり判定非表示
+        if (collision.gameObject.tag != "Bullet" && collision.gameObject.tag != "Missile" && collision.gameObject.tag != "Energy")
+        {
+            BulletHit();//見た目と当たり判定非表示
+        }
     }
 
     /// <summary>

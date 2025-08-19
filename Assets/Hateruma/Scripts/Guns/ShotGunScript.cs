@@ -8,7 +8,7 @@ public class ShotGunScript : LiveGunOriginScript
     {
         //ShotGun用にパラメーターを設定
         bulletAmount = 50;
-        bulletSpeed = 13;
+        bulletSpeed = 6.5f;
         fireRate = 1;
         fireRange = 100;
         reloadTime = 3;
