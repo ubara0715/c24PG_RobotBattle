@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,7 +66,7 @@ public class OpSensorObj : RadarSensorObj
 
 public class OpticalSensor : MonoBehaviour
 {
-    public float angle = 45;
+    public float angle = 90;
 
     public CoreScript coreScript;
 
@@ -116,6 +117,13 @@ public class OpticalSensor : MonoBehaviour
     /// <returns>ターゲットがレーダーに引っかかったかどうか</returns>
     private bool CheckIfItCanFire(Collider other)
     {
+
+        RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
+        if (sampleObj.IsBullet())
+        {
+            return !IsMyBullet(other.gameObject);
+        }
+
         if (tags.Contains(other.gameObject.tag))
         {
 
@@ -123,7 +131,7 @@ public class OpticalSensor : MonoBehaviour
 
             float target_angle = Vector3.Angle(transform.forward, posDelta);
 
-            if (target_angle < angle)
+            if (target_angle < angle / 2)
             {
                 Debug.DrawRay(coreTf.position, posDelta, Color.red);
                 if (Physics.Raycast(coreTf.position, posDelta, out RaycastHit hit, sensorSize))
@@ -178,6 +186,12 @@ public class OpticalSensor : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
 
+        RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
+        if (sampleObj.IsBullet())
+        {
+            if (IsMyBullet(other.gameObject)) return;
+        }
+
         if (tags.Contains(other.gameObject.tag))
         {
             if (targets.Find(x => x.EqualGameObj(other.gameObject)) != null)
@@ -187,5 +201,35 @@ public class OpticalSensor : MonoBehaviour
                 coreScript.OnOpticalSensor(targets, isVisible: false);
             }
         }
+    }
+
+    /// <summary>
+    /// 自分の弾丸かどうかを調べる
+    /// </summary>
+    /// <param name="otherObj">接触したオブジェクト</param>
+    /// <returns>自身の弾丸かどうか</returns>
+    private bool IsMyBullet(GameObject otherObj)
+    {
+        if (otherObj.CompareTag("Bullet"))
+        {
+            string sampleName = "";
+            if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
+            {
+                //sampleName = bullet.masterName;
+            }
+            else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
+            {
+                //sampleName = energy.masterName;
+            }
+            else if(otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
+            {
+                //sampleName = missile.masterName;
+            }
+            if (coreScript.playerName == sampleName)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

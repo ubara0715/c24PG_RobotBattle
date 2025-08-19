@@ -1,10 +1,11 @@
 using System;
+using System.Xml.Serialization;
 using UnityEngine;
 
 
 public class MissileBulletSc : MonoBehaviour
 {
-    public string masterName;   //持ち主の名前    
+    public string masterName;   //持ち主の名前
 
     Rigidbody rb;               //弾のRigidbody
     GameObject bulletObj;       //弾丸Object
@@ -15,22 +16,38 @@ public class MissileBulletSc : MonoBehaviour
     [Header("加速度"),SerializeField, Range(1, 100)] float accel;
     [Header("最高速度"),SerializeField, Range(1, 100)] float accelLimit = 10;
     [Header("追尾性能"), SerializeField, Range(0, 3)] float tracking;
-    [Header("爆発範囲(m)"),SerializeField, Range(0.1f, 30)] float explosionArea = 10;
+    [Header("爆発範囲(m)"),SerializeField, Range(3f, 30)] float explosionArea = 10;
     [Header("加速開始時間"),SerializeField,Range(0, 1)] float startAccelTime = 0.2f;
     [Header("追跡可能距離"), SerializeField] float trackingLimitDistance = 10;
     [Header("消失までの時間"),SerializeField] float destroyTimeLimit = 10;
     [Header("爆発判定残留時間"),SerializeField] float explosionTime = 0.4f;
-    //[Header("炸裂弾"), SerializeField, Range(0, 10)] int explosiveBullet = 0;
 
     int attackPow = 0;          //攻撃力
     float moveSpeed = 0;        //速度
     bool isTracking = false;    //追跡中
     bool isAccel = false;       //加速中
-    //bool isExplosive = false;   //炸裂弾
+    float attackRate = 1;       //攻撃力倍率
 
-    public void SetTargetObj(GameObject target)
+    public int sum_weight;
+
+    public void SetBullet(GameObject target,string name,bool twin = false,bool multiple = false)
     {
         targetObj = target;
+        masterName = name;
+        if (twin) attackRate = 0.8f;
+        if (multiple) attackRate = 0.5f;
+    }
+
+    public int GetWeght()
+    {
+        //重さを返す (爆発力*10 + 追跡率 + 加速率 + 速度)/10
+        return (int)((explosionArea * 20 + tracking * 33 + accel + initalSpeed)/(10));
+    }
+
+    [ContextMenu("SetSumWeight")]
+    public void SetSumWeight()
+    {
+        sum_weight = GetWeght();
     }
 
     public int GetDamage()
@@ -47,10 +64,10 @@ public class MissileBulletSc : MonoBehaviour
     private void Start()
     {
         //消失までのカウント
-        Invoke(nameof(DestroyGameObject), destroyTimeLimit);
+        Invoke(nameof(HitObject), destroyTimeLimit);
 
         //追跡実行までのカウント(フラグをオンにする)
-        Invoke(new Action(() => { isTracking = true; }).Method.Name, explosionArea / 20);
+        Invoke(new Action(() => { isTracking = true; }).Method.Name, explosionArea / 30);
 
         //加速開始までのカウント(フラグをオンにする)
         Invoke(new Action(() => { isAccel = true; }).Method.Name, startAccelTime);
@@ -84,8 +101,8 @@ public class MissileBulletSc : MonoBehaviour
         //爆発オブジェクトの範囲を指定の大きさに変更
         explosionObj.transform.localScale = new Vector3(explosionArea, explosionArea, explosionArea);
 
-        //攻撃力を爆発力の5倍に指定(int)
-        attackPow = (int)(explosionArea * 5);
+        //攻撃力を爆発力の10倍に指定(int)
+        attackPow = (int)(explosionArea * 10);
     }
 
     void AccelBullet()
@@ -150,15 +167,14 @@ public class MissileBulletSc : MonoBehaviour
             if (targetCoreSc.playerName == masterName) return;
             HitObject();
         }
-        
+        else if(other.CompareTag("Ground"))
+        {
+            HitObject();
+        }
 
         //if (collision.collider.CompareTag("レーザー"))
         //{
-        //    DestroyGameObject()
-        //}
-        //else
-        //{
-
+        //    HitObject();
         //}
     }
 
@@ -169,12 +185,10 @@ public class MissileBulletSc : MonoBehaviour
         {
             //当たった敵機体のCoreScriptを取得
             CoreScript targetCoreSc = other.GetComponent<CoreScript>();
-            //もし自分の機体なら無視
-            if (targetCoreSc.playerName == this.masterName) return;
             //機体にバリアや装甲が存在するならダメージを与えない(返却)
             if (CheckBarrier(targetCoreSc) || CheckArmor(targetCoreSc)) return;
             //何もないなら直接本体にダメージを与える
-            targetCoreSc.Damage(attackPow);
+            targetCoreSc.Damage((int)(attackPow * attackRate));
         }
     }
 

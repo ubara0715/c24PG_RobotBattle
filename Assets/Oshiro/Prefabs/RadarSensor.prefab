@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8218843612631982883}
   - component: {fileID: 6983383766193698829}
   - component: {fileID: 2388338274070071805}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RadarSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
