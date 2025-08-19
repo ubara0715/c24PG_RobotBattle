@@ -20,7 +20,7 @@ public class RobotMoveScript : MonoBehaviour
     [SerializeField, Header("最大質量")]
     float maxMass = 0;
     //ロボットの質量
-    float mass = 0;
+    int mass = 0;
 
     [SerializeField, Header("ジャンプ力")]
     float jumpForce = 1.0f;
@@ -52,12 +52,12 @@ public class RobotMoveScript : MonoBehaviour
     void Start()
     {
         //スケールx+y+zを質量とする
-        mass = transform.localScale.x + transform.localScale.y + transform.localScale.z;
+        mass = (int)(transform.localScale.x + transform.localScale.y + transform.localScale.z);
+        coreScript.AddWeight(mass);
+        coreScript.hp = mass * 100;
 
         //質量に応じて移動速度を計算
         limitSpeed = Mathf.Lerp(maxSpeed, minSpeed, mass / maxMass);
-
-        SetMass();
     }
 
     void Update()
@@ -88,7 +88,7 @@ public class RobotMoveScript : MonoBehaviour
     public void SetMass()
     {
         //CoreScriptの重量変数をロボットの質量とする
-        robotRB.mass = mass + coreScript.weight;
+        robotRB.mass = coreScript.weight;
     }
  
     public void MoveUp()//上移動
