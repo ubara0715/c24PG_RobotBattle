@@ -16,18 +16,26 @@ public class RobotMoveScript : MonoBehaviour
 
     //ロボットのRigidbody
     Rigidbody robotRB;
-    //ロボットの体積
-    float robotValue = 0;
     
+    [SerializeField, Header("最大質量")]
+    float maxMass = 0;
+    //ロボットの質量
+    float mass = 0;
+
     [SerializeField, Header("ジャンプ力")]
     float jumpForce = 1.0f;
     [SerializeField, Header("移動力")]
     float moveForce = 1.0f;
     [SerializeField, Header("回転力")]
     float rotateForce = 1.0f;
-    [SerializeField, Header("最高速度")]
+
+    [SerializeField, Header("上限")]
     float maxSpeed = 1.0f;
-    
+    [SerializeField, Header("下限")]
+    float minSpeed = 1.0f;
+    //ロボットの制限速度
+    float limitSpeed = 0;
+
     //回転制御bool
     bool isRotate = false;
     //追従制御bool
@@ -43,7 +51,12 @@ public class RobotMoveScript : MonoBehaviour
 
     void Start()
     {
-        robotValue = transform.localScale.x * transform.localScale.y * transform.localScale.z; 
+        //スケールx+y+zを質量とする
+        mass = transform.localScale.x + transform.localScale.y + transform.localScale.z;
+
+        //質量に応じて移動速度を計算
+        limitSpeed = Mathf.Lerp(maxSpeed, minSpeed, mass / maxMass);
+
         SetMass();
     }
 
@@ -75,22 +88,21 @@ public class RobotMoveScript : MonoBehaviour
     public void SetMass()
     {
         //CoreScriptの重量変数をロボットの質量とする
-        robotRB.mass = Mathf.Sqrt(robotValue + coreScript.weight);
+        robotRB.mass = mass + coreScript.weight;
     }
  
     public void MoveUp()//上移動
     {
         robotRB.AddForce(Vector3.up * jumpForce, ForceMode.Force);
 
-        if (robotRB.velocity.y > maxSpeed)
+        if (robotRB.velocity.y > limitSpeed)
         {
             robotRB.velocity = new Vector3(
                 robotRB.velocity.x,
-                maxSpeed,
+                limitSpeed,
                 robotRB.velocity.z
                 );
         }
-
     }
 
     //ターゲットへの移動
@@ -104,7 +116,7 @@ public class RobotMoveScript : MonoBehaviour
 
             //上方移動
             if (transform.position.y - targetOBJ.transform.position.y < -1
-                && energyScript.UseEnergy(0.08f))
+                && energyScript.UseEnergy(0))
             {
                 MoveUp();
             }
@@ -120,7 +132,7 @@ public class RobotMoveScript : MonoBehaviour
 
             if (Mathf.Abs(horizontalDir.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
                 || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
-                && energyScript.UseEnergy(0.02f))
+                && energyScript.UseEnergy(0))
             {
                 robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
 
@@ -140,9 +152,6 @@ public class RobotMoveScript : MonoBehaviour
                 //robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
             }
 
-
-
-
             yield return null;
         }
 
@@ -158,12 +167,12 @@ public class RobotMoveScript : MonoBehaviour
         float speed = Mathf.Sqrt(Mathf.Pow(robotRB.velocity.x, 2) + Mathf.Pow(robotRB.velocity.z, 2));
         
         //移動速度上限チェック
-        if (speed > maxSpeed)
+        if (speed > limitSpeed)
         {
             robotRB.velocity = new Vector3(
-                robotRB.velocity.x / (speed / maxSpeed),
+                robotRB.velocity.x / (speed / limitSpeed),
                 robotRB.velocity.y,
-                robotRB.velocity.z / (speed / maxSpeed)
+                robotRB.velocity.z / (speed / limitSpeed)
                 );
         }
     }
@@ -177,7 +186,7 @@ public class RobotMoveScript : MonoBehaviour
 
             direction.y = 0;//xz平面で回転
 
-            if (energyScript.UseEnergy(0.01f))
+            if (energyScript.UseEnergy(0))
             {
                 float angle = Vector3.SignedAngle(transform.forward, direction, transform.up);
                 
