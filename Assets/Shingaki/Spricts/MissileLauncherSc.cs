@@ -9,6 +9,8 @@ public class MissileLauncherSc : MonoBehaviour
     MissileBulletSc bulletCon;
     CoreScript core;
 
+    [Header("生成した弾のまとめ先(Noneでも大丈夫)"), SerializeField] GameObject bulletGroup;
+    [Header("以下の変数はデバッグ以外で変更しないで(装弾数は変えていいかも)")]
     [Header("装弾数"), SerializeField] int bulletCount;
     [Header("一回の射撃で発射する弾数"),SerializeField] int bulletNum;
     [Header("連射間隔"), SerializeField] float continuousFiringInterval;
@@ -97,9 +99,18 @@ public class MissileLauncherSc : MonoBehaviour
             {
                 if (bulletCountNow <= 0) break;
                 //ミサイル弾の生成
-                bulletCon =
+                if(bulletGroup == null)
+                {
+                    bulletCon =
                     Instantiate(missilePf, gameObject.transform.position, transform.rotation)
                         .GetComponent<MissileBulletSc>();
+                }
+                else
+                {
+                    bulletCon =
+                    Instantiate(missilePf, gameObject.transform.position, transform.rotation, bulletGroup.transform)
+                        .GetComponent<MissileBulletSc>();
+                }
                 //ミサイル弾スクリプトにターゲットオブジェクトを指定
                 bulletCon.SetBullet(targetObj.TargetOBj(), core.playerName, twin: true);
                 //ランダムに向きをずらす
@@ -114,9 +125,18 @@ public class MissileLauncherSc : MonoBehaviour
         else
         {
             //ミサイル弾の生成
-            bulletCon =
+            if (bulletGroup == null)
+            {
+                bulletCon =
                 Instantiate(missilePf, gameObject.transform.position, transform.rotation)
                     .GetComponent<MissileBulletSc>();
+            }
+            else
+            {
+                bulletCon =
+                Instantiate(missilePf, gameObject.transform.position, transform.rotation, bulletGroup.transform)
+                    .GetComponent<MissileBulletSc>();
+            }
             //ミサイル弾スクリプトにターゲットオブジェクトを指定
             bulletCon.SetBullet(targetObj.TargetOBj(), core.playerName);
             //ランダムに向きをずらす
@@ -174,9 +194,18 @@ public class MissileLauncherSc : MonoBehaviour
             GameObject target = targetList_sumple[index].TargetOBj();
 
             //ミサイル弾の生成
-            bulletCon =
+            if (bulletGroup == null)
+            {
+                bulletCon =
                 Instantiate(missilePf, gameObject.transform.position, transform.rotation)
                     .GetComponent<MissileBulletSc>();
+            }
+            else
+            {
+                bulletCon =
+                Instantiate(missilePf, gameObject.transform.position, transform.rotation, bulletGroup.transform)
+                    .GetComponent<MissileBulletSc>();
+            }
             //ミサイル弾スクリプトにターゲットオブジェクトを指定
             bulletCon.SetBullet(target, core.playerName, multiple: true);
             //ランダムに向きをずらす
