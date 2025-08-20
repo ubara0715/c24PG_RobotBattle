@@ -41,7 +41,7 @@ public class EnergyBulletScript : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Destroy(gameObject);
-        Debug.Log("ダメージ(エネルギー弾)："+EnergyDamege());
+        //Debug.Log("ダメージ(エネルギー弾)："+EnergyDamege());
     }
 
     // 関数
