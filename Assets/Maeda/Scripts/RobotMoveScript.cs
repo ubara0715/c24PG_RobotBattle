@@ -29,12 +29,19 @@ public class RobotMoveScript : MonoBehaviour
     [SerializeField, Header("回転力")]
     float rotateForce = 1.0f;
 
+    [Header("制限速度の範囲")]
     [SerializeField, Header("上限")]
     float maxSpeed = 1.0f;
     [SerializeField, Header("下限")]
     float minSpeed = 1.0f;
     //ロボットの制限速度
     float limitSpeed = 0;
+
+    [Header("ターゲット切り替え間隔")]
+    [SerializeField, Header("最大")]
+    float maxTime = 0;
+    [SerializeField, Header("最小")]
+    float minTime = 0;
 
     //回転制御bool
     bool isRotate = false;
@@ -58,6 +65,8 @@ public class RobotMoveScript : MonoBehaviour
 
         //質量に応じて移動速度を計算
         limitSpeed = Mathf.Lerp(maxSpeed, minSpeed, mass / maxMass);
+
+        SetTarget();
     }
 
     void Update()
@@ -73,15 +82,21 @@ public class RobotMoveScript : MonoBehaviour
         //ターゲットがいないとき
         if (!isTarget)
         {
-            targetObj.transform.position = new Vector3(
-                Random.Range(-50, 50), 
-                Random.Range(1, 10), 
+            SetTarget();
+        }
+    }
+
+    //ランダム移動のターゲットを決める
+    void SetTarget()
+    {
+        targetObj.transform.position = new Vector3(
+                Random.Range(-50, 50),
+                Random.Range(1, 10),
                 Random.Range(-50, 50)
                 );
 
-            isTarget = true;
-            _moveTarget = StartCoroutine(MoveTarget(targetObj));
-        }
+        isTarget = true;
+        _moveTarget = StartCoroutine(MoveTarget(targetObj));
     }
 
     //機体の質量を設定(機体の重量が変わるたびにCoreScriptから呼ぶ)
@@ -108,6 +123,9 @@ public class RobotMoveScript : MonoBehaviour
     //ターゲットへの移動
     public IEnumerator MoveTarget(GameObject targetOBJ)
     {
+        float waitTime = Random.Range(minTime, maxTime);
+        float startTime = Time.time;
+
         //条件は後々変更
         while (true)
         {
@@ -121,11 +139,15 @@ public class RobotMoveScript : MonoBehaviour
                 MoveUp();
             }
 
-            //ターゲットに近づいたら終了(仮条件)
-            if (Mathf.Abs(direction.x) <= (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+            //到達チェック(仮条件)
+            bool reached = Mathf.Abs(direction.x) <= (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
                 && Mathf.Abs(direction.y) <= (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
-                && Mathf.Abs(direction.z) <= (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
-                break;
+                && Mathf.Abs(direction.z) <= (transform.localScale.z + targetOBJ.transform.localScale.z) / 2;
+
+            //タイムチェック
+            bool timeOut = Time.time - startTime >= waitTime;
+
+            if (reached || timeOut) break;
 
             //xz平面の移動ベクトルを計算
             Vector3 horizontalDir = new Vector3(direction.x, 0, direction.z);
@@ -156,7 +178,6 @@ public class RobotMoveScript : MonoBehaviour
         }
 
         robotRB.velocity = Vector3.zero;
-
         isTarget = false;
     }
 
@@ -201,7 +222,6 @@ public class RobotMoveScript : MonoBehaviour
         }
 
         robotRB.angularVelocity = Vector3.zero;
-
         isRotate = false;
     }
 }
