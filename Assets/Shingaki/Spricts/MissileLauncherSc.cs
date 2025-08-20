@@ -27,9 +27,13 @@ public class MissileLauncherSc : MonoBehaviour
     private void Awake()
     {
         //コアスクリプト取得
-        transform.parent.parent.TryGetComponent(out core);
+        transform.parent.TryGetComponent(out core);
         //初期弾数を残弾数に代入
         bulletCountNow = bulletCount;
+    }
+
+    private void Start()
+    {
         //総重量をコアに伝達
         core.AddWeight(GetSumWight());
     }

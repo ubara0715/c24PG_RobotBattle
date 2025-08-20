@@ -149,10 +149,16 @@ public class MissileBulletSc : MonoBehaviour
         explosionObj.SetActive(true);
 
         //îöî≠àÍíËéûä‘å„Ç…è¡ñ≈
-        Invoke(nameof(DestroyGameObject),explosionTime);
+        Invoke(nameof(DestroyWait),explosionTime);
     }
 
-    void DestroyGameObject()
+    void DestroyWait()
+    {
+        transform.Translate(0, 10000000, 0);
+        Invoke(nameof(DestroyObj),0.1f);
+    }
+
+    private void DestroyObj()
     {
         Destroy(gameObject);
     }
