@@ -48,10 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9390dd2f1cae98e46b236b8896d67236, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sensorSize: 40
   coreScript: {fileID: 0}
   tags:
   - Player
-  sensorSize: 10
+  energyScript: {fileID: 0}
 --- !u!33 &6542085765272925580
 MeshFilter:
   m_ObjectHideFlags: 0

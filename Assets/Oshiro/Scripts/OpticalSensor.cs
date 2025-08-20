@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class OpSensorObj : RadarSensorObj
 {
     public OpSensorObj(GameObject lockOnObj) : base(lockOnObj) { }
@@ -66,23 +67,39 @@ public class OpSensorObj : RadarSensorObj
 
 public class OpticalSensor : MonoBehaviour
 {
+    [Header("視野角"),Range(1,180)]
     public float angle = 90;
+
+    [Header("センサーの大きさ"), Range(40, 400)]
+    public float sensorSize = 50;
 
     public CoreScript coreScript;
 
     private Transform coreTf;
 
-    public float sensorSize = 50;
-
-    private List<OpSensorObj> targets = new();
+    public List<OpSensorObj> targets = new();
 
     public List<string> tags = new();
+
+    public EnergyScript energyScript;
+
+    private List<OpSensorObj> dummyTargets = new();
+
+    private bool isEnergy = true;
+
+    private bool isReset = true;
 
     private void Awake()
     {
         coreTf = transform.parent.GetComponent<Transform>();//本体のトランスフォームを取得
         transform.localScale = Vector3.one * sensorSize;//サイズを設定
         transform.localPosition = Vector3.zero;//ポジションを初期化
+
+    }
+
+    private void Update()
+    {
+        SensorEnergy();
     }
 
     /// <summary>
@@ -124,7 +141,7 @@ public class OpticalSensor : MonoBehaviour
             return !IsMyBullet(other.gameObject);
         }
 
-        if (tags.Contains(other.gameObject.tag))
+        if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
 
             Vector3 posDelta = other.transform.position - coreTf.position;
@@ -155,7 +172,14 @@ public class OpticalSensor : MonoBehaviour
             {
                 //ターゲットリストに含まれ、本体のスクリプトに伝える
                 targets.Add(new OpSensorObj(other.gameObject));
-                coreScript.OnOpticalSensor(targets, isVisible: true);
+                if (isEnergy)
+                {
+                    coreScript.OnOpticalSensor(targets, isVisible: true);
+                }
+                else
+                {
+                    coreScript.OnOpticalSensor(dummyTargets, isVisible: true);
+                }
             }
         }
         else if(tags.Contains(other.gameObject.tag))
@@ -164,21 +188,36 @@ public class OpticalSensor : MonoBehaviour
             {
                 //ターゲットリストから除外し、本体のスクリプトに伝える
                 targets.RemoveAt(targets.FindIndex(x => x.EqualGameObj(other.gameObject)));
-                coreScript.OnOpticalSensor(targets, isVisible: false);
+                if (isEnergy)
+                {
+                    coreScript.OnOpticalSensor(targets, isVisible: false);
+                }
+                else
+                {
+                    coreScript.OnOpticalSensor(dummyTargets, isVisible: false);
+                }
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
+        
         if (tags.Contains(other.gameObject.tag))
         {
+            
             if(CheckIfItCanFire(other))
             {
                 targets.Add(new OpSensorObj(other.gameObject));
 
-                coreScript.OnOpticalSensor(targets, isVisible: true);
+                if (isEnergy)
+                {
+                    coreScript.OnOpticalSensor(targets, isVisible: true);
+                }
+                else
+                {
+                    coreScript.OnOpticalSensor(dummyTargets, isVisible: true);
+                }
             }
         }
     }
@@ -192,13 +231,20 @@ public class OpticalSensor : MonoBehaviour
             if (IsMyBullet(other.gameObject)) return;
         }
 
-        if (tags.Contains(other.gameObject.tag))
+        if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
             if (targets.Find(x => x.EqualGameObj(other.gameObject)) != null)
             {
                 targets.RemoveAt(targets.FindIndex(x => x.EqualGameObj(other.gameObject)));
 
-                coreScript.OnOpticalSensor(targets, isVisible: false);
+                if (isEnergy)
+                {
+                    coreScript.OnOpticalSensor(targets, isVisible: false);
+                }
+                else
+                {
+                    coreScript.OnOpticalSensor(dummyTargets, isVisible: false);
+                }
             }
         }
     }
@@ -215,17 +261,56 @@ public class OpticalSensor : MonoBehaviour
             string sampleName = "";
             if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
             {
-                //sampleName = bullet.masterName;
+                sampleName = bullet.masterName;
             }
             else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
             {
-                //sampleName = energy.masterName;
+                sampleName = energy.masterName;
             }
             else if(otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
             {
-                //sampleName = missile.masterName;
+                sampleName = missile.masterName;
             }
             if (coreScript.playerName == sampleName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// エネルギー消費
+    /// </summary>
+    private void SensorEnergy()
+    {
+        if (energyScript.UseEnergy(sensorSize / 40f * (angle / 90) * Time.deltaTime))
+        {
+            isEnergy = true;
+        }
+        else
+        {
+            isEnergy = false;
+            if (isReset)
+            {
+                coreScript.OnOpticalSensor(dummyTargets, isVisible: false);
+                isReset = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rayAngle"></param>
+    /// <returns></returns>
+    public bool CheckWall(float rayAngle)
+    {
+        Vector3 direction = Quaternion.Euler(new Vector3(0, rayAngle, 0)) * coreTf.forward;
+        Debug.DrawRay(coreTf.position, direction * sensorSize / 2, Color.blue);
+        if (Physics.Raycast(coreTf.position, direction, out RaycastHit hit, sensorSize / 2))
+        {
+            if(hit.collider.tag == "Ground")
             {
                 return true;
             }

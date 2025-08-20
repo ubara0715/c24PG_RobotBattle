@@ -13,12 +13,12 @@ public class MissileBulletSc : MonoBehaviour
     GameObject targetObj;       //追尾対象
 
     [Header("初速度"),SerializeField, Range(1, 100)] float initalSpeed;
-    [Header("加速度"),SerializeField, Range(1, 100)] float accel;
+    [Header("加速度"),SerializeField, Range(1, 100)] float accel; 
     [Header("最高速度"),SerializeField, Range(1, 100)] float accelLimit = 10;
-    [Header("追尾性能"), SerializeField, Range(0, 3)] float tracking;
+    [Header("ホーミング性能"), SerializeField, Range(0, 3)] float tracking;  
     [Header("爆発範囲(m)"),SerializeField, Range(3f, 30)] float explosionArea = 10;
     [Header("加速開始時間"),SerializeField,Range(0, 1)] float startAccelTime = 0.2f;
-    [Header("追跡可能距離"), SerializeField] float trackingLimitDistance = 10;
+    [Header("ホーミング可能距離"), SerializeField] float trackingLimitDistance = 10;
     [Header("消失までの時間"),SerializeField] float destroyTimeLimit = 10;
     [Header("爆発判定残留時間"),SerializeField] float explosionTime = 0.4f;
 
