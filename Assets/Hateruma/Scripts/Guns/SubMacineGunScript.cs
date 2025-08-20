@@ -10,10 +10,11 @@ public class SubMacineGunScript : LiveGunOriginScript
         bulletAmount = 30;
         bulletSpeed = 7.5f;
         fireRate = 10;
-        fireRange = 250;
+        fireRange = 75;
         reloadTime = 1.5f;
         fireEnergyReq = 1;
         reloadEnergyReq = bulletAmount * fireEnergyReq / 3;
+        gunWeight = 1;
 
         Preparation();
     }

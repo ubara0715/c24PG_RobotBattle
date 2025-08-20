@@ -10,10 +10,11 @@ public class CannonScript : LiveGunOriginScript
         bulletAmount = 1;
         bulletSpeed = 5;
         fireRate = 1;
-        fireRange = 500;
+        fireRange = 150;
         reloadTime = 5;
         fireEnergyReq = 50;
         reloadEnergyReq = bulletAmount * fireEnergyReq / 3;
+        gunWeight = 3;
 
         Preparation();
     }

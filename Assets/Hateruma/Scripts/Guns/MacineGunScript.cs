@@ -12,10 +12,11 @@ public class MacineGunScript : LiveGunOriginScript
         bulletAmount = 30;
         bulletSpeed = 7.5f;
         fireRate = 6;
-        fireRange = 450;
+        fireRange = 100;
         reloadTime = 2;
         fireEnergyReq = 2;
         reloadEnergyReq = bulletAmount * fireEnergyReq / 3;
+        gunWeight = 1;
 
         Preparation();
     }

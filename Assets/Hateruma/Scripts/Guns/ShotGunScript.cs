@@ -10,10 +10,11 @@ public class ShotGunScript : LiveGunOriginScript
         bulletAmount = 50;
         bulletSpeed = 6.5f;
         fireRate = 1;
-        fireRange = 100;
+        fireRange = 50;
         reloadTime = 3;
         fireEnergyReq = 7;
         reloadEnergyReq = (bulletAmount / 10) * fireEnergyReq / 3;
+        gunWeight = 2;
 
         isShotGun = true;
 

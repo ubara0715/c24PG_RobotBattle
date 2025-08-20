@@ -52,7 +52,7 @@ public class EnergyGearScript : MonoBehaviour
     public void ShotEnergy(int usedEnergy,GameObject target)
     {
         // 指定の範囲外のエネルギー量なら撃たない
-        if (usedEnergy <= usedMin || usedEnergy >= usedMax) return;
+        if (usedEnergy < usedMin || usedEnergy > usedMax) return;
 
         // 方向転換
         transform.LookAt(target.transform);
@@ -69,14 +69,18 @@ public class EnergyGearScript : MonoBehaviour
 
         Rigidbody rb_clone = clone.GetComponent<Rigidbody>();
         EnergyBulletScript bulletSc = clone.GetComponent<EnergyBulletScript>();
+
         bulletSc.usedEnergy_clone = usedEnergy;
         bulletSc.speed_clone = speed;
+        bulletSc.masterName = core.playerName;
+
         clone.transform.parent = bulletGroup.transform;
         clone.name = "EnergyBullet_" + core.playerName;
-
+        
         // 撃ちだす
         Shot(rb_clone);
 
+        // クールタイム
         coolTime = 0.0f;
         isCoolDown = true;
     }
@@ -87,7 +91,7 @@ public class EnergyGearScript : MonoBehaviour
         //Vector3 instPos = new Vector3(transform.parent.localPosition.x + transform.position.x, transform.parent.localPosition.y + transform.position.y, transform.parent.localPosition.z + instantiatePos);
         Vector3 instPos = (transform.position + transform.forward);
 
-         GameObject energyBullet_clone =
+        GameObject energyBullet_clone =
             Instantiate(
                 energyBullet,
                 instPos, //AddForceなので生成位置にモノがあるとうまく発射できない、のでもし発射しないなぁと思ったら調整してね
