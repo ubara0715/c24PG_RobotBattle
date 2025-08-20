@@ -2,24 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class EnergyGearScript : MonoBehaviour
 {
-    [SerializeField,Header("エネルギー弾のPrefabを入れてください")] GameObject energyBullet;
-    [Header("エネルギープールが付いたObjectを入れてください")] public EnergyScript energyPool;
-    [Header("生成したObjectをまとめておく空のObjectを入れてください")] public GameObject bulletGroup;
+    [SerializeField,Header("エネルギー弾のPrefab")] GameObject energyBullet;
+    [Header("エネルギープールが付いたObject")] public EnergyScript energyPool;
+    [Header("生成したObjectをまとめておく空のObject")] public GameObject bulletGroup;
     CoreScript core;
 
-    public float usedMax = 100.0f;
-    public float usedMin = 10.0f;
+    //[HideInInspector]
+    public int usedMax = 50;
+    //[HideInInspector]
+    public int usedMin = 10;
     public float speed = 100.0f;
 
+    [SerializeField, Header("クールタイム")]
+    float coolTime_initial = 1.0f;
+    [SerializeField]
+    float coolTime;
+    public bool isCoolDown = false;
 
     // メソッド
     void Start()
     {
         core = transform.parent.GetComponent<CoreScript>();
-        core.AddWeight((int)usedMax);
+        core.AddWeight((int)(usedMax * 0.1));
+        coolTime = coolTime_initial;
+    }
+
+    void Update()
+    {
+        if(isCoolDown)
+        {
+            coolTime += 1.0f * Time.deltaTime;
+            if(coolTime >= coolTime_initial)
+            {
+                isCoolDown = false;
+            }
+        }
     }
 
     // public関数
@@ -27,27 +48,21 @@ public class EnergyGearScript : MonoBehaviour
     /// エネルギー弾を発射する関数、威力変更可能
     /// </summary>
     /// <param name="usedEnergy">威力、数値そのまま威力になる</param>
-    /// <param name="target">ターゲット、センサーで感知したオブジェクトを入れる予定</param>
+    /// <param name="target">ターゲット、センサーで感知したオブジェクトを入れる想定</param>
     public void ShotEnergy(int usedEnergy,GameObject target)
     {
-        // ダメージ計算、減算はBulletの方で行う
-        // 値を渡してAddForceを加えるだけ
-
-        if(usedEnergy < usedMin || usedEnergy > usedMax)
-        {
-            return; // 範囲外なら撃たない
-        }
-
-        // 距離計算してエネルギー使用量を最低限に抑えたい
-        float two_distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
+        // 指定の範囲外のエネルギー量なら撃たない
+        if (usedEnergy <= usedMin || usedEnergy >= usedMax) return;
 
         // 方向転換
         transform.LookAt(target.transform);
-        if(transform.eulerAngles.y < -90.0f || transform.eulerAngles.y > 90.0f)
-        {
-            energyPool.energyAmount += usedEnergy; // 方向転換が90度以上ならエネルギーを消費しない
-            return; // 方向転換が90度以上なら撃たない
-        }
+        if(transform.rotation.y <= -90.0f || transform.rotation.y >= 90.0f) return;
+
+        // クールタイム中なら撃たない
+        if (isCoolDown) return;
+
+        // エネルギーがないなら撃たない、あるなら減らす
+        if (!energyPool.UseEnergy(usedEnergy)) return;
 
         // クローン作成と設定、Componentの取得
         GameObject clone = EnergyBullet_clone();
@@ -61,6 +76,10 @@ public class EnergyGearScript : MonoBehaviour
 
         // 撃ちだす
         Shot(rb_clone);
+
+        // クールタイム
+        coolTime = 0.0f;
+        isCoolDown = true;
     }
 
     // privert関数
@@ -69,7 +88,7 @@ public class EnergyGearScript : MonoBehaviour
         //Vector3 instPos = new Vector3(transform.parent.localPosition.x + transform.position.x, transform.parent.localPosition.y + transform.position.y, transform.parent.localPosition.z + instantiatePos);
         Vector3 instPos = (transform.position + transform.forward);
 
-         GameObject energyBullet_clone =
+        GameObject energyBullet_clone =
             Instantiate(
                 energyBullet,
                 instPos, //AddForceなので生成位置にモノがあるとうまく発射できない、のでもし発射しないなぁと思ったら調整してね

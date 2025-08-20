@@ -15,24 +15,10 @@ public class EnergyBulletScript : MonoBehaviour
     [HideInInspector] public float usedEnergy_clone;
     [HideInInspector] public float speed_clone;
 
-    // カラー変更
-    /*
-    ParticleSystem.MainModule main;
-    ParticleSystem ps;
-    */
-
-    // メソッド
-    void Start()
-    {
-        //main = ps.main;
-    }
-
     void Awake()
     {
         energyGear = GetComponentInParent<EnergyGearScript>();
-        //ps = GetComponent<ParticleSystem>();
         FilghtDistance();
-        //SwitchColor();
     }
 
     void Update()
@@ -44,8 +30,7 @@ public class EnergyBulletScript : MonoBehaviour
         }
 
         // 距離減衰
-        //Debug.Log("残りエネルギー：" + usedEnergy_clone + "飛距離：" + range);
-        if(range / 100 >= 1)
+        if(range / speed_clone >= 1)
         {
             DistanceDecay();
             range = 0;
@@ -72,7 +57,6 @@ public class EnergyBulletScript : MonoBehaviour
     void DistanceDecay()
     {
         usedEnergy_clone = (int)(usedEnergy_clone * 0.8f);
-        //Debug.Log("ダメージ減少！");
     }
 
     // 飛距離計算
@@ -81,43 +65,4 @@ public class EnergyBulletScript : MonoBehaviour
         range += speed_clone * Time.fixedDeltaTime;
         Invoke("FilghtDistance", Time.deltaTime);
     }
-
-
-    // 保留
-    /*
-    void SwitchColor()
-    {
-        if(usedEnergy_clone <= 25.0f)
-        {
-            //main.startColor = new ParticleSystem.MinMaxGradient(Color.green);
-        }
-        else if(usedEnergy_clone <= energyGear.usedMax * 0.3)
-        {
-            // 青色
-        }
-        else if(usedEnergy_clone <= energyGear.usedMax * 0.6)
-        {
-            // 白色
-        }
-        else
-        {
-            // 黄色
-        }
-    }
-    */
-
-    //開発段階
-    /*
-    void OnCollisionEnter(Collision collision)
-    {
-        distance = (int)(Vector3.Distance(startPos, transform.position));
-        Destroy(gameObject);
-    }
-
-    //テスト用、距離減衰はできた
-    void OnDestroy()
-    {
-        //Debug.Log(EnergyDamege());
-    }
-    */
 }

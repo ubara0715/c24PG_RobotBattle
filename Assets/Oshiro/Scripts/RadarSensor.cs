@@ -64,24 +64,37 @@ public class RadarSensorObj
 public class RadarSensor : MonoBehaviour
 {
 
+    [Header("センサーの大きさ"), Range(40, 400)]
+    public int sensorSize = 40;
+
     private List<RadarSensorObj> targets = new();
 
     public CoreScript coreScript;
 
     public List<string> tags = new();
 
-    public float sensorSize = 1;
+    public EnergyScript energyScript;
+
+    private List<RadarSensorObj> dummyTargets = new();
+
+    private bool isEnergy = true;
+
+    private bool isReset = true;
 
     private void Awake()
     {
         transform.localScale = Vector3.one * sensorSize;//サイズを設定
         transform.localPosition = Vector3.zero;//ポジションを初期化
-        
+    }
+
+    private void Update()
+    {
+        SensorEnergy();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
+        
         //設定したタグにオブジェクトが含まれていたら
         if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
@@ -93,12 +106,20 @@ public class RadarSensor : MonoBehaviour
             }
             //ターゲットリストに含まれ、本体のスクリプトに伝える
             targets.Add(sampleObj);
-            coreScript.OnRadarSensor(targets, isEnter: true);
+            if (isEnergy)
+            {
+                coreScript.OnRadarSensor(targets, isEnter: true);
+            }
+            else
+            {
+                coreScript.OnRadarSensor(dummyTargets, isEnter: true);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        
         RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
         if (sampleObj.IsBullet())
         {
@@ -111,7 +132,14 @@ public class RadarSensor : MonoBehaviour
 
             //ターゲットリストから除外し、本体のスクリプトに伝える
             targets.RemoveAt(targets.FindIndex(x => x.EqualGameObj(other.gameObject)));
-            coreScript.OnRadarSensor(targets, isEnter: false);
+            if (isEnergy)
+            {
+                coreScript.OnRadarSensor(targets, isEnter: false);
+            }
+            else
+            {
+                coreScript.OnRadarSensor(dummyTargets, isEnter: false);
+            }
         }
 
 
@@ -130,15 +158,15 @@ public class RadarSensor : MonoBehaviour
             string sampleName = "";
             if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
             {
-                //sampleName = bullet.masterName;
+                sampleName = bullet.masterName;
             }
             else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
             {
-                //sampleName = energy.masterName;
+                sampleName = energy.masterName;
             }
             else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
             {
-                //sampleName = missile.masterName;
+                sampleName = missile.masterName;
             }
             if (coreScript.playerName == sampleName)
             {
@@ -146,6 +174,27 @@ public class RadarSensor : MonoBehaviour
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// エネルギー消費
+    /// </summary>
+    private void SensorEnergy()
+    {
+        if (energyScript.UseEnergy(sensorSize/40f*Time.deltaTime))
+        {
+            isEnergy = true;
+            isReset = true;
+        }
+        else
+        {
+            isEnergy = false;
+            if (isReset)
+            {
+                coreScript.OnRadarSensor(dummyTargets, isEnter: false);
+                isReset = false;
+            }
+        }
     }
 
 }
