@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RadarSensorObj
@@ -59,6 +60,11 @@ public class RadarSensorObj
     {
         return targetObj == lossObj;
     }
+
+    public bool IsActive()
+    {
+        return targetObj.activeSelf;
+    }
 }
 
 public class RadarSensor : MonoBehaviour
@@ -90,6 +96,17 @@ public class RadarSensor : MonoBehaviour
     private void Update()
     {
         SensorEnergy();
+
+        foreach(RadarSensorObj target in targets)
+        {
+            if (target.IsBullet())
+            {
+                if (!target.IsActive())
+                {
+                    targets.Remove(target);
+                }
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -100,6 +100,17 @@ public class OpticalSensor : MonoBehaviour
     private void Update()
     {
         SensorEnergy();
+
+        foreach (OpSensorObj target in targets)
+        {
+            if (target.IsBullet())
+            {
+                if (!target.IsActive())
+                {
+                    targets.Remove(target);
+                }
+            }
+        }
     }
 
     /// <summary>
