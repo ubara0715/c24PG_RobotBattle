@@ -116,7 +116,7 @@ public class RobotMoveScript : MonoBehaviour
 
             //è„ï˚à⁄ìÆ
             if (transform.position.y - targetOBJ.transform.position.y < -1
-                && energyScript.UseEnergy(0))
+                && energyScript.UseEnergy(0.02f))
             {
                 MoveUp();
             }
@@ -132,7 +132,7 @@ public class RobotMoveScript : MonoBehaviour
 
             if (Mathf.Abs(horizontalDir.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
                 || Mathf.Abs(horizontalDir.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
-                && energyScript.UseEnergy(0))
+                && energyScript.UseEnergy(0.01f))
             {
                 robotRB.AddForce(horizontalDir.normalized * moveForce, ForceMode.Force);
 
