@@ -7,6 +7,9 @@ public class BulletScript : MonoBehaviour
 {
     public string masterName;
     bool hit = false;//当たり判定用
+    bool isShot = false;//発射されたかどうか
+    Vector3 nowPos;//現在位置
+  　float stopThreshold = 0.0001f; // 停止判定のしきい値
 
     [SerializeField] float mass;//弾丸質量
     int damage = 0;//ダメージ用
@@ -23,6 +26,22 @@ public class BulletScript : MonoBehaviour
     {
         meshRen = GetComponent<MeshRenderer>();
         col = GetComponent<Collider>();
+        nowPos = transform.position;
+    }
+
+    private void Update()
+    {
+        if (isShot)
+        {
+            float dist = Vector3.Distance(transform.position, nowPos);
+            if (dist < stopThreshold) // しきい値未満なら停止とみなす
+            {
+                BulletHit();
+            }
+        }
+        nowPos = transform.position;
+
+
     }
 
     /// <summary>
@@ -34,6 +53,7 @@ public class BulletScript : MonoBehaviour
     {
         meshRen.enabled = true;//弾表示
         col.enabled = true;//判定表示
+        Invoke(nameof(IsShotTrue), 0.3f);
 
         //距離に合わせて減衰用、弾落ちのアニメーションカーブを作成
         if (speedAnimC == null)
@@ -78,6 +98,11 @@ public class BulletScript : MonoBehaviour
         BulletHit();//見た目と当たり判定非表示
     }
 
+    void IsShotTrue()
+    {
+        isShot = true;
+    }
+
     /// <summary>
     /// ダメージ値を計算して返す
     /// </summary>
@@ -101,6 +126,7 @@ public class BulletScript : MonoBehaviour
     void BulletHit()
     {
         hit = false;
+        isShot = false;
         meshRen.enabled = false;
         col.enabled = false;
     }

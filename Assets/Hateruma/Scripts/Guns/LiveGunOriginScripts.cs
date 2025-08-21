@@ -69,6 +69,8 @@ public class LiveGunOriginScript : MonoBehaviour
             item.masterName = playerName;
             usedBulletSCList.Add(item);
         }
+
+        coreSC.AddWeight(gunWeight);
     }
 
 
