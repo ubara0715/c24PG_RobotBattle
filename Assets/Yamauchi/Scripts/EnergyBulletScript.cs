@@ -40,7 +40,8 @@ public class EnergyBulletScript : MonoBehaviour
     // 振れたら消滅、ダメージを表示
     void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        Invoke("Destroy_Self", 0.1f);
         //Debug.Log("ダメージ(エネルギー弾)："+EnergyDamege());
     }
 
@@ -64,5 +65,10 @@ public class EnergyBulletScript : MonoBehaviour
     {
         range += speed_clone * Time.fixedDeltaTime;
         Invoke("FilghtDistance", Time.deltaTime);
+    }
+
+    void Destroy_Self()
+    {
+        Destroy(gameObject);
     }
 }
