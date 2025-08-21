@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 334819526456702769}
   m_Layer: 0
   m_Name: BulletCollider
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,9 +134,9 @@ GameObject:
   - component: {fileID: 8527801596577265790}
   - component: {fileID: 8065132471244051882}
   - component: {fileID: 6926748230425005160}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ExplosionCollider
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,7 +219,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 6536016052136446904}
   m_Layer: 0
   m_Name: MissileBullet_Base
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -297,6 +297,7 @@ MonoBehaviour:
   trackingLimitDistance: 100
   destroyTimeLimit: 10
   explosionTime: 0.3
+  sum_weight: 0
 --- !u!54 &6536016052136446904
 Rigidbody:
   m_ObjectHideFlags: 0

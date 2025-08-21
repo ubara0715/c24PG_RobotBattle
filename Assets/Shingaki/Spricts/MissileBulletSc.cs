@@ -149,10 +149,16 @@ public class MissileBulletSc : MonoBehaviour
         explosionObj.SetActive(true);
 
         //爆発一定時間後に消滅
-        Invoke(nameof(DestroyGameObject),explosionTime);
+        Invoke(nameof(DestroyWait),explosionTime);
     }
 
-    void DestroyGameObject()
+    void DestroyWait()
+    {
+        gameObject.SetActive(false);
+        Invoke(nameof(DestroyObj),0.1f);
+    }
+
+    private void DestroyObj()
     {
         Destroy(gameObject);
     }
@@ -189,6 +195,7 @@ public class MissileBulletSc : MonoBehaviour
             if (CheckBarrier(targetCoreSc) || CheckArmor(targetCoreSc)) return;
             //何もないなら直接本体にダメージを与える
             targetCoreSc.Damage((int)(attackPow * attackRate));
+            Debug.Log("いて");
         }
     }
 
