@@ -32,7 +32,6 @@ public class MaedaCoreScript : CoreScript
 
     void Start()
     {
-        hp = hp / 2;
         maxHp = hp;
     }
 
@@ -92,7 +91,6 @@ public class MaedaCoreScript : CoreScript
     public override void OnRadarSensor(List<RadarSensorObj> getTargets, bool isEnter)
     {
         radarEnemyList.Clear();
-        radarBulletList.Clear();
         foreach (var data in getTargets)
         {
             if (data == null) continue;
@@ -103,10 +101,6 @@ public class MaedaCoreScript : CoreScript
                 {
                     radarEnemyList.Add(data);
                 }
-                if (data.IsBullet())
-                {
-                    radarBulletList.Add(data);
-                }
             }
             catch (MissingReferenceException)
             {
@@ -116,6 +110,7 @@ public class MaedaCoreScript : CoreScript
     }
     public override void OnOpticalSensor(List<OpSensorObj> getTargets, bool isVisible)
     {
+        opticalEnemyList.Clear();
         foreach (var data in getTargets)
         {
             if (data == null) continue;
@@ -124,10 +119,7 @@ public class MaedaCoreScript : CoreScript
             {
                 if (data.IsEnemy())
                 {
-                    if (isVisible)
-                        opticalEnemyList.Add(data);
-                    else
-                        opticalEnemyList.Remove(data);
+                    opticalEnemyList.Add(data);
                 }
             }
             catch (MissingReferenceException)

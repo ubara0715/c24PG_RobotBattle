@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBullet: {fileID: 1018266170718575047, guid: 4ce0168340ce75248b19c39fbb5ce226, type: 3}
   energyPool: {fileID: 1350043825498223506}
-  bulletGroup: {fileID: 8589420787837820318}
+  bulletGroup: {fileID: 0}
   usedMax: 100
   usedMin: 10
   speed: 100
@@ -155,7 +155,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &943932857580785254
 GameObject:
@@ -452,7 +452,6 @@ Transform:
   - {fileID: 1716921717428515871}
   - {fileID: 6996299299089706511}
   - {fileID: 3259560384031544450}
-  - {fileID: 7159265784641513895}
   - {fileID: 3297434430100792426}
   - {fileID: 924089906191038904}
   - {fileID: 966186234615899247}
@@ -1522,37 +1521,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5000001
   m_Center: {x: -0.00000023841858, y: 0.00000011920929, z: -0.00000011920929}
---- !u!1 &8589420787837820318
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7159265784641513895}
-  m_Layer: 8
-  m_Name: Bullets
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7159265784641513895
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8589420787837820318}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 29988206780737009}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8855037836126470913
 GameObject:
   m_ObjectHideFlags: 0
