@@ -14,7 +14,7 @@ public class OpSensorObj : RadarSensorObj
     /// <param name="myTf">自身のトランスフォーム</param>
     /// <param name="isSqr">Sqrのマグニチュードにするか</param>
     /// <returns>ターゲットとの距離の大きさ</returns>
-    public float GetDistance(Transform myTf,bool isSqr = false)
+    public float GetDistance(Transform myTf, bool isSqr = false)
     {
         Vector3 diffvec = GetVector(myTf);
 
@@ -67,7 +67,7 @@ public class OpSensorObj : RadarSensorObj
 
 public class OpticalSensor : MonoBehaviour
 {
-    [Header("視野角"),Range(1,180)]
+    [Header("視野角"), Range(1, 180)]
     public float angle = 90;
 
     [Header("センサーの大きさ"), Range(40, 400)]
@@ -101,16 +101,15 @@ public class OpticalSensor : MonoBehaviour
     {
         SensorEnergy();
 
-        foreach (OpSensorObj target in targets)
+        dummyTargets = new(targets);
+        foreach (OpSensorObj target in dummyTargets)
         {
-            if (target.IsBullet())
+            if (target.IsBullet() && !target.IsActive())
             {
-                if (!target.IsActive())
-                {
-                    targets.Remove(target);
-                }
+                targets.Remove(target);
             }
         }
+        dummyTargets.Clear();
     }
 
     /// <summary>
@@ -125,11 +124,11 @@ public class OpticalSensor : MonoBehaviour
         if (targets.Count == 0) return null;
         OpSensorObj sample = targets[0];
 
-        foreach(OpSensorObj targetObj in targets)
+        foreach (OpSensorObj targetObj in targets)
         {
             if (!targetObj.IsEnemy()) continue;
 
-            if(sample.GetDistance(myTf,isSqr:true) > targetObj.GetDistance(myTf,isSqr : true))
+            if (sample.GetDistance(myTf, isSqr: true) > targetObj.GetDistance(myTf, isSqr: true))
             {
                 sample = targetObj;
             }
@@ -179,7 +178,7 @@ public class OpticalSensor : MonoBehaviour
 
         if (CheckIfItCanFire(other))
         {
-            if(targets.Find(x => x.EqualGameObj(other.gameObject)) == null)
+            if (targets.Find(x => x.EqualGameObj(other.gameObject)) == null)
             {
                 //ターゲットリストに含まれ、本体のスクリプトに伝える
                 targets.Add(new OpSensorObj(other.gameObject));
@@ -193,7 +192,7 @@ public class OpticalSensor : MonoBehaviour
                 }
             }
         }
-        else if(tags.Contains(other.gameObject.tag))
+        else if (tags.Contains(other.gameObject.tag))
         {
             if (targets.Find(x => x.EqualGameObj(other.gameObject)) != null)
             {
@@ -213,11 +212,11 @@ public class OpticalSensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         if (tags.Contains(other.gameObject.tag))
         {
-            
-            if(CheckIfItCanFire(other))
+
+            if (CheckIfItCanFire(other))
             {
                 targets.Add(new OpSensorObj(other.gameObject));
 
@@ -267,25 +266,23 @@ public class OpticalSensor : MonoBehaviour
     /// <returns>自身の弾丸かどうか</returns>
     private bool IsMyBullet(GameObject otherObj)
     {
-        if (otherObj.CompareTag("Bullet"))
+
+        string sampleName = "";
+        if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
         {
-            string sampleName = "";
-            if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
-            {
-                sampleName = bullet.masterName;
-            }
-            else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
-            {
-                sampleName = energy.masterName;
-            }
-            else if(otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
-            {
-                sampleName = missile.masterName;
-            }
-            if (coreScript.playerName == sampleName)
-            {
-                return true;
-            }
+            sampleName = bullet.masterName;
+        }
+        else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
+        {
+            sampleName = energy.masterName;
+        }
+        else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
+        {
+            sampleName = missile.masterName;
+        }
+        if (coreScript.playerName == sampleName)
+        {
+            return true;
         }
         return false;
     }
@@ -321,7 +318,7 @@ public class OpticalSensor : MonoBehaviour
         Debug.DrawRay(coreTf.position, direction * sensorSize / 2, Color.blue);
         if (Physics.Raycast(coreTf.position, direction, out RaycastHit hit, sensorSize / 2))
         {
-            if(hit.collider.tag == "Ground")
+            if (hit.collider.tag == "Ground")
             {
                 return true;
             }

@@ -97,21 +97,20 @@ public class RadarSensor : MonoBehaviour
     {
         SensorEnergy();
 
-        foreach(RadarSensorObj target in targets)
+        dummyTargets = new(targets);
+        foreach (RadarSensorObj target in dummyTargets)
         {
-            if (target.IsBullet())
+            if (target.IsBullet() && !target.IsActive())
             {
-                if (!target.IsActive())
-                {
-                    targets.Remove(target);
-                }
+                targets.Remove(target);
             }
         }
+        dummyTargets.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         //設定したタグにオブジェクトが含まれていたら
         if (tags.Contains(other.gameObject.tag) && transform.parent.gameObject != other.gameObject)
         {
@@ -136,7 +135,7 @@ public class RadarSensor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        
+
         RadarSensorObj sampleObj = new RadarSensorObj(other.gameObject);
         if (sampleObj.IsBullet())
         {
@@ -170,25 +169,23 @@ public class RadarSensor : MonoBehaviour
     /// <returns>自身の弾丸かどうか</returns>
     private bool IsMyBullet(GameObject otherObj)
     {
-        if (otherObj.CompareTag("Bullet"))
+
+        string sampleName = "";
+        if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
         {
-            string sampleName = "";
-            if (otherObj.TryGetComponent<BulletScript>(out BulletScript bullet))
-            {
-                sampleName = bullet.masterName;
-            }
-            else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
-            {
-                sampleName = energy.masterName;
-            }
-            else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
-            {
-                sampleName = missile.masterName;
-            }
-            if (coreScript.playerName == sampleName)
-            {
-                return true;
-            }
+            sampleName = bullet.masterName;
+        }
+        else if (otherObj.TryGetComponent<EnergyBulletScript>(out EnergyBulletScript energy))
+        {
+            sampleName = energy.masterName;
+        }
+        else if (otherObj.TryGetComponent<MissileBulletSc>(out MissileBulletSc missile))
+        {
+            sampleName = missile.masterName;
+        }
+        if (coreScript.playerName == sampleName)
+        {
+            return true;
         }
         return false;
     }
@@ -198,7 +195,7 @@ public class RadarSensor : MonoBehaviour
     /// </summary>
     private void SensorEnergy()
     {
-        if (energyScript.UseEnergy(sensorSize/40f*Time.deltaTime))
+        if (energyScript.UseEnergy(sensorSize / 40f * Time.deltaTime))
         {
             isEnergy = true;
             isReset = true;
