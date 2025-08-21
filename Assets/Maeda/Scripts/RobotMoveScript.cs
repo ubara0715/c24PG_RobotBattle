@@ -58,6 +58,14 @@ public class RobotMoveScript : MonoBehaviour
 
     void Start()
     {
+        maxMass = 30;
+        jumpForce = 1000;
+        moveForce = 5000;
+        maxSpeed = 10;
+        minSpeed = 5;
+        maxTime = 10;
+        minTime = 5;
+
         //ÉXÉPÅ[Éãx+y+zÇéøó Ç∆Ç∑ÇÈ
         mass = (int)(transform.localScale.x + transform.localScale.y + transform.localScale.z);
         coreScript.AddWeight(mass);
